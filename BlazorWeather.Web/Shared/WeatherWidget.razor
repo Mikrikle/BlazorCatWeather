@@ -1,0 +1,47 @@
+﻿@inject IWeatherService weatherService
+
+
+@if (city == null || currentWeather == null || forecastWeather == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        @city.Name
+        <br />
+        @city.Country
+        <br />
+        @city.Local_names?["ru"]
+
+        <hr />
+        @currentWeather.Main.Temp
+        <br />
+        @currentWeather.Main.FeelsLike
+        <br />
+        @currentWeather.Weather.First().Description
+        <br />
+        Облачность @currentWeather.Clouds%
+
+        <br />
+        <p>Прогноз погоды</p>
+        @foreach(var item in forecastWeather.List)
+        {
+            @item.Main.Temp
+            <br />
+        }
+    </div>
+}
+
+@code {
+    private GeocodingDto? city;
+    private WeatherCurrentDto? currentWeather;
+    private WeatherForecastDto? forecastWeather;
+
+    protected override async Task OnInitializedAsync()
+    {
+        city = await weatherService.GetCityLocation("Moscow");
+        currentWeather = await weatherService.GetWeather(55.7504461, 37.6174943);
+        forecastWeather = await weatherService.GetForecast(55.7504461, 37.6174943);
+    }
+}

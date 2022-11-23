@@ -20,10 +20,17 @@ namespace BlazorWeather.Web.Services
             return response?.FirstOrDefault();
         }
 
-        public async Task<CurrentWeatherDto?> GetWeather(double lat, double lon)
+        public async Task<WeatherCurrentDto?> GetWeather(double lat, double lon)
         {
             //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang=ru&appid={API key}
-            var response = await httpClient.GetFromJsonAsync<CurrentWeatherDto?>("sample-data/current-weather-data.json");
+            var response = await httpClient.GetFromJsonAsync<WeatherCurrentDto?>("sample-data/current-weather-data.json");
+            return response;
+        }
+
+        public async Task<WeatherForecastDto?> GetForecast(double lat, double lon)
+        {
+            //api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang=ru&appid={API key}
+            var response = await httpClient.GetFromJsonAsync<WeatherForecastDto?>("sample-data/weather-forecast.json");
             return response;
         }
 
