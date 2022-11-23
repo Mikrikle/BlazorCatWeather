@@ -1,0 +1,21 @@
+﻿@inject ICatApiService catApiService
+
+@if (image == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        <img src="@image.Url" width="@image.Width" height="@image.Height" alt="Cat">
+    </div>
+}
+
+@code {
+    private CatApiImageDto? image;
+
+    protected override async Task OnInitializedAsync()
+    {
+        image = await catApiService.GetImage();
+    }
+}
