@@ -1,0 +1,21 @@
+﻿@inject IMeowFactService meowFactService
+
+@if (fact == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        @fact?.Data?.FirstOrDefault();
+    </div>
+}
+
+@code {
+    private MeowFactDto? fact;
+
+    protected override async Task OnInitializedAsync()
+    {
+        fact = await meowFactService.GetFact();
+    }
+}
