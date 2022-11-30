@@ -13,6 +13,7 @@ namespace BlazorWeather.Web.Services
 
         private const string currentWeatherKey = "Key_Weather_currentWeather";
         private const string forecastWeatherKey = "Key_Weather_forecastWeather";
+        private const string cityKeyPartial = "Key_Weather_City_";
 
         public WeatherService(HttpClient httpClient, ILocalStorageService localStorageService)
         {
@@ -23,7 +24,7 @@ namespace BlazorWeather.Web.Services
         //api.openweathermap.org/data/2.5/weather?q={city}&appid={API key}
         public async Task<GeocodingDto?> GetCityLocation(string city)
         {
-            string cityKey = "Key_Weather_City_" + city;
+            string cityKey = cityKeyPartial + city;
             var response = await localStorageService.GetItemAsync<GeocodingDto>(cityKey);
             if (response == null)
             {
