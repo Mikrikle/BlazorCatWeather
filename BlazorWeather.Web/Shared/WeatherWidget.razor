@@ -8,28 +8,60 @@
 else
 {
     <div class="container">
-        @city.Name
-        <br />
-        @city.Country
-        <br />
-        @city.Local_names?["ru"]
+        <div class="m-3">
+            <h5>Город</h5>
+            @city.Name
+            <br />
+            @city.Country
+            <br />
+            @city.Local_names?["ru"]
+        </div>
 
         <hr />
-        @currentWeather.Main.Temp
-        <br />
-        @currentWeather.Main.FeelsLike
-        <br />
-        @currentWeather.Weather.First().Description
-        <br />
-        Облачность @currentWeather.Clouds%
 
-        <br />
-        <p>Прогноз погоды</p>
-        @foreach(var item in forecastWeather.List)
-        {
-            @item.Main.Temp
+        <div class="m-3">
+            <h5>Погода сейчас</h5>
+            Температура @currentWeather.Main.Temp
             <br />
-        }
+            Ощущается как @currentWeather.Main.FeelsLike
+            <br />
+            @currentWeather.Weather.First().Description
+            <br />
+            Максимальная температура @currentWeather.Main.TempMax
+            <br />
+            Минимальная температура @currentWeather.Main.TempMin
+            <br />
+            Давление @currentWeather.Main.Pressure hPa
+            <br />
+            Влажность @currentWeather.Main.Humidity %
+            <br />
+            Облачность @currentWeather.Clouds.All %
+            <br />
+            Скорость ветра @currentWeather.Wind.Speed м/с
+            <br />
+
+            @if(currentWeather.Snow != null)
+            {
+                <text>Снег</text> @currentWeather.Snow.hour <text>мм</text>
+            }
+            else if (@currentWeather.Rain != null)
+            {
+                <text>Дождь</text> @currentWeather.Rain.hour <text>мм</text>
+            }
+
+            Время обновления @ConvertDateFromUnix(currentWeather.Dt)
+        </div>
+
+        <hr />
+
+        <div class="m-3">
+            <p>Прогноз погоды</p>
+            @foreach (var item in forecastWeather.List)
+            {
+                @item.Main.Temp
+                <br />
+            }
+        </div>
     </div>
 }
 
@@ -37,6 +69,13 @@ else
     private GeocodingDto? city;
     private WeatherCurrentDto? currentWeather;
     private WeatherForecastDto? forecastWeather;
+
+    private DateTime ConvertDateFromUnix(int dt)
+    {
+        DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        return dateTime.AddSeconds(dt).ToLocalTime();
+        
+    }
 
     protected override async Task OnInitializedAsync()
     {
