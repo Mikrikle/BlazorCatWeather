@@ -1,6 +1,5 @@
 ﻿@inject IWeatherService weatherService
 
-
 @if (city == null || currentWeather == null || forecastWeather == null)
 {
     <p><em>Loading...</em></p>
@@ -14,7 +13,7 @@ else
             <br />
             @city.Country
             <br />
-            @city.Local_names?["ru"]
+            @city.Local_names?[CultureInfo.CurrentCulture.Parent.ToString()]
         </div>
 
         <hr />
