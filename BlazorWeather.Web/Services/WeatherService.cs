@@ -13,6 +13,7 @@ namespace BlazorWeather.Web.Services
 
         private const string currentWeatherKey = "Key_Weather_currentWeather";
         private const string forecastWeatherKey = "Key_Weather_forecastWeather";
+        private const string currentCityKey = "Key_Weather_CurrentCity";
         private const string cityKeyPartial = "Key_Weather_City_";
 
         public WeatherService(HttpClient httpClient, ILocalStorageService localStorageService)
@@ -34,6 +35,25 @@ namespace BlazorWeather.Web.Services
 
             return response;
         }
+        public async Task<GeocodingDto?> GetCityLocation()
+        {
+            var response = await localStorageService.GetItemAsync<GeocodingDto>(currentCityKey);
+            if (response == null)
+            {
+                response = await GetCityLocation("Moscow");
+                await localStorageService.SetItemAsync(currentCityKey, response);
+            }
+            return response;
+        }
+
+        public async void SetCurrentCity(GeocodingDto city)
+        {
+            await localStorageService.SetItemAsync(currentCityKey, city);
+        }
+        public async void SetCurrentCity(string city)
+        {
+            await localStorageService.SetItemAsync(currentCityKey, await GetCityLocation(city));
+        }
 
         //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang=ru&appid={API key}
         public async Task<WeatherCurrentDto?> GetWeather(double lat, double lon)
@@ -50,6 +70,11 @@ namespace BlazorWeather.Web.Services
         public async Task<WeatherCurrentDto?> GetWeather(string city)
         {
             var geo = await GetCityLocation(city);
+            return await GetWeather(geo?.Lat ?? 0, geo?.Lon ?? 0);
+        }
+        public async Task<WeatherCurrentDto?> GetWeather()
+        {
+            var geo = await GetCityLocation();
             return await GetWeather(geo?.Lat ?? 0, geo?.Lon ?? 0);
         }
 
@@ -69,6 +94,11 @@ namespace BlazorWeather.Web.Services
         public async Task<WeatherForecastDto?> GetForecast(string city)
         {
             var geo = await GetCityLocation(city);
+            return await GetForecast(geo?.Lat ?? 0, geo?.Lon ?? 0);
+        }
+        public async Task<WeatherForecastDto?> GetForecast()
+        {
+            var geo = await GetCityLocation();
             return await GetForecast(geo?.Lat ?? 0, geo?.Lon ?? 0);
         }
 

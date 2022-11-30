@@ -79,8 +79,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        city = await weatherService.GetCityLocation("Moscow");
-        currentWeather = await weatherService.GetWeather(55.7504461, 37.6174943);
-        forecastWeather = await weatherService.GetForecast(55.7504461, 37.6174943);
+        city = await weatherService.GetCityLocation();
+        currentWeather = await weatherService.GetWeather();
+        forecastWeather = await weatherService.GetForecast();
     }
 }
