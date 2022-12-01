@@ -70,10 +70,9 @@ else
     <hr />
 
     <section>
-        <div class="scrolling-wrapper-flexbox">
+        <div class="container scrolling-wrapper-flexbox pb-3">
             @foreach (var item in forecastWeather.List.Take(8))
             {
-                <!--@ConvertDateFromUnix(item.Dt).DayOfWeek  <span> . . . . . . </span> @item.Main.Temp-->
                 <div class="card-flex m-1">
 
                     <div class="card border-secondary" style="border-radius: 35px;">
