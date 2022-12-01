@@ -6,63 +6,94 @@
 }
 else
 {
-    <div class="container">
-        <div class="m-3">
-            <h5>Город</h5>
-            @city.Name
-            <br />
-            @city.Country
-            <br />
-            @city.Local_names?[CultureInfo.CurrentCulture.Parent.ToString()]
+    <section class="p-3">
+        <div class="container h-100">
+
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-8 col-lg-6">
+
+                    <div class="card border-secondary" style="border-radius: 35px;">
+                        <div class="card-body p-4">
+
+                            <div class="d-flex">
+                                <h6 class="flex-grow-1">@city.Local_names?[CultureInfo.CurrentCulture.Parent.ToString()]</h6>
+                                <h6>@ConvertDateFromUnix(currentWeather.Dt).ToShortTimeString()</h6>
+                            </div>
+
+                            <div class="d-flex flex-column text-center mt-5 mb-4">
+                                <span class="small text-black-75">@currentWeather.Weather.First().Description</span>
+                                <h6 class="display-4 mb-0 font-weight-bold text-black-75">@currentWeather.Main.Temp°C</h6>
+                                <div class="d-flex flex-row justify-content-center mt-2">
+                                    <span class="small text-black-75">@currentWeather.Main.TempMin°C</span>
+                                    &nbsp;/&nbsp;
+                                    <span class="small text-black-75">@currentWeather.Main.TempMax°C</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <div>
+                                        <i class="fas fa-wind fa-fw"></i>
+                                        <span class="ms-1">@currentWeather.Wind.Speed м/с</span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-tint fa-fw"></i>
+                                        <span class="ms-1"> @currentWeather.Main.Humidity% </span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-cloud fa-fw"></i>
+                                        <span class="ms-1"> @currentWeather.Clouds.All% </span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-gauge fa-fw"></i>
+                                        <span class="ms-1"> @(Math.Round(currentWeather.Main.Pressure * 0.750064)) мм рт.ст.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card border-secondary mt-3 p-3" style="border-radius: 35px;">
+                        <div class="card-body">
+                            <div class="d-flex flex-column text-center">
+                                <span class="small text-black-75">Ощущается как @currentWeather.Main.FeelsLike°C</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
+    </section>
+    <hr />
 
-        <hr />
-
-        <div class="m-3">
-            <h5>Погода сейчас</h5>
-            Температура @currentWeather.Main.Temp
-            <br />
-            Ощущается как @currentWeather.Main.FeelsLike
-            <br />
-            @currentWeather.Weather.First().Description
-            <br />
-            Максимальная температура @currentWeather.Main.TempMax
-            <br />
-            Минимальная температура @currentWeather.Main.TempMin
-            <br />
-            Давление @currentWeather.Main.Pressure hPa
-            <br />
-            Влажность @currentWeather.Main.Humidity %
-            <br />
-            Облачность @currentWeather.Clouds.All %
-            <br />
-            Скорость ветра @currentWeather.Wind.Speed м/с
-            <br />
-
-            @if(currentWeather.Snow != null)
+    <section>
+        <div class="scrolling-wrapper-flexbox">
+            @foreach (var item in forecastWeather.List.Take(8))
             {
-                <text>Снег</text> @currentWeather.Snow.hour <text>мм</text>
-            }
-            else if (@currentWeather.Rain != null)
-            {
-                <text>Дождь</text> @currentWeather.Rain.hour <text>мм</text>
+                <!--@ConvertDateFromUnix(item.Dt).DayOfWeek  <span> . . . . . . </span> @item.Main.Temp-->
+                <div class="card-flex m-1">
+
+                    <div class="card border-secondary" style="border-radius: 35px;">
+                        <div class="card-body">
+                            <div class="d-flex flex-column text-center">
+                                <span>@ConvertDateFromUnix(item.Dt).ToString("d/M H:mm")</span>
+
+                                <span class="small text-black-75">@item.Weather.First().Description</span>
+                                <span class="display-6 mb-0 font-weight-bold text-black-75">@item.Main.Temp°C</span>
+                                <span class="small text-black-75">@item.Main.TempMin°C&nbsp;/&nbsp;@item.Main.TempMax°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
 
-            Время обновления @ConvertDateFromUnix(currentWeather.Dt)
         </div>
-
-        <hr />
-
-        <div class="m-3">
-            <p>Прогноз погоды</p>
-            @foreach (var item in forecastWeather.List)
-            {
-                @item.Main.Temp
-                <br />
-            }
-        </div>
-    </div>
+    </section>
 }
+
 
 @code {
     private GeocodingDto? city;
@@ -73,7 +104,7 @@ else
     {
         DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         return dateTime.AddSeconds(dt).ToLocalTime();
-        
+
     }
 
     protected override async Task OnInitializedAsync()
