@@ -20,6 +20,7 @@ namespace BlazorWeather.Web.Dtos
     public class Main
     {
         public double Temp { get; set; }
+        [JsonPropertyName("feels_like")]
         public double FeelsLike { get; set; }
         [JsonPropertyName("temp_min")]
         public double TempMin { get; set; }
@@ -27,7 +28,9 @@ namespace BlazorWeather.Web.Dtos
         public double TempMax { get; set; }
         public int Pressure { get; set; }
         public int Humidity { get; set; }
+        [JsonPropertyName("sea_level")]
         public int SeaLevel { get; set; }
+        [JsonPropertyName("grnd_level")]
         public int GrndLevel { get; set; }
     }
 
