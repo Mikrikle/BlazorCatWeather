@@ -1,5 +1,15 @@
 ﻿@inject IWeatherService weatherService
 
+
+<div class="row g-3">
+    <div class="col-auto">
+        <input class="form-control" @bind="AppId"/>
+    </div>
+    <div class="col-auto">
+        <input class="btn btn-success mb-3" type="button" value="Ok" @onclick="SetAppId">
+    </div>
+</div>
+
 @if (city == null || currentWeather == null || forecastWeather == null)
 {
     <p><em>Loading...</em></p>
@@ -17,16 +27,18 @@ else
 
                             <div class="d-flex">
                                 <h6 class="flex-grow-1">@city.Local_names?[CultureInfo.CurrentCulture.Parent.ToString()]</h6>
-                                <h6>@ConvertDateFromUnix(currentWeather.Dt).ToShortTimeString()</h6>
+                                <h6>@DateConverter.UnixTimeToLocalDateTime(currentWeather.Dt).ToString("H:mm")</h6>
                             </div>
 
                             <div class="d-flex flex-column text-center mt-5 mb-4">
                                 <span class="small text-black-75">@currentWeather.Weather.First().Description</span>
                                 <h6 class="display-4 mb-0 font-weight-bold text-black-75">@currentWeather.Main.Temp°C</h6>
                                 <div class="d-flex flex-row justify-content-center mt-2">
-                                    <span class="small text-black-75">@currentWeather.Main.TempMin°C</span>
-                                    &nbsp;/&nbsp;
-                                    <span class="small text-black-75">@currentWeather.Main.TempMax°C</span>
+                                    <span class="small text-black-75">
+                                        @currentWeather.Main.TempMin°C
+                                        &nbsp;/&nbsp;
+                                        @currentWeather.Main.TempMax°C
+                                    </span>
                                 </div>
                             </div>
 
@@ -75,14 +87,13 @@ else
             {
                 <div class="card-flex m-1">
 
-                    <div class="card border-secondary" style="border-radius: 35px;">
+                    <div class="card border-secondary" style="border-radius: 35px; min-height:160px; min-width:160px">
                         <div class="card-body">
                             <div class="d-flex flex-column text-center">
-                                <span>@ConvertDateFromUnix(item.Dt).ToString("d/M H:mm")</span>
-
-                                <span class="small text-black-75">@item.Weather.First().Description</span>
+                                <span>@DateConverter.UnixTimeToLocalDateTime(item.Dt).ToString("H:mm")</span>
                                 <span class="display-6 mb-0 font-weight-bold text-black-75">@item.Main.Temp°C</span>
                                 <span class="small text-black-75">@item.Main.TempMin°C&nbsp;/&nbsp;@item.Main.TempMax°C</span>
+                                <span class="small text-black-75">@item.Weather.First().Description</span>
                             </div>
                         </div>
                     </div>
@@ -98,16 +109,19 @@ else
     private GeocodingDto? city;
     private WeatherCurrentDto? currentWeather;
     private WeatherForecastDto? forecastWeather;
+    private string AppId { get; set; }
 
-    private DateTime ConvertDateFromUnix(int dt)
+    protected async void SetAppId()
     {
-        DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        return dateTime.AddSeconds(dt).ToLocalTime();
-
+        await weatherService.SetAppId(AppId);
+        city = await weatherService.GetCityLocation();
+        currentWeather = await weatherService.GetWeather();
+        forecastWeather = await weatherService.GetForecast();
     }
 
     protected override async Task OnInitializedAsync()
     {
+        AppId = await weatherService.GetAppId();
         city = await weatherService.GetCityLocation();
         currentWeather = await weatherService.GetWeather();
         forecastWeather = await weatherService.GetForecast();

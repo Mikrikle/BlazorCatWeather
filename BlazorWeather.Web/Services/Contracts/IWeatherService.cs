@@ -5,10 +5,12 @@ namespace BlazorWeather.Web.Services.Contracts
 {
     public interface IWeatherService
     {
+        public Task SetAppId(string appId);
+        public Task<string> GetAppId();
         public Task<GeocodingDto?> GetCityLocation(string city);
         public Task<GeocodingDto?> GetCityLocation();
-        public void SetCurrentCity(GeocodingDto city);
-        public void SetCurrentCity(string city);
+        public Task SetCurrentCity(GeocodingDto city);
+        public Task SetCurrentCity(string city);
         public Task<WeatherCurrentDto?> GetWeather(double lat, double lon);
         public Task<WeatherCurrentDto?> GetWeather(string city);
         public Task<WeatherCurrentDto?> GetWeather();
