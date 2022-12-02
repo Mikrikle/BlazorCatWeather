@@ -5,7 +5,7 @@
         public static DateTime UnixTimeToLocalDateTime(long unixtime)
         {
             DateTime dtDateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddMilliseconds(unixtime).ToLocalTime();
+            dtDateTime = dtDateTime.AddSeconds(unixtime).ToLocalTime();
             return dtDateTime;
         }
 
