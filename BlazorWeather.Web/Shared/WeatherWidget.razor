@@ -1,15 +1,5 @@
 ﻿@inject IWeatherService weatherService
 
-
-<div class="row g-3">
-    <div class="col-auto">
-        <input class="form-control" @bind="AppId"/>
-    </div>
-    <div class="col-auto">
-        <input class="btn btn-success mb-3" type="button" value="Ok" @onclick="SetAppId">
-    </div>
-</div>
-
 @if (city == null || currentWeather == null || forecastWeather == null)
 {
     <p><em>Loading...</em></p>
@@ -109,19 +99,9 @@ else
     private GeocodingDto? city;
     private WeatherCurrentDto? currentWeather;
     private WeatherForecastDto? forecastWeather;
-    private string AppId { get; set; }
-
-    protected async void SetAppId()
-    {
-        await weatherService.SetAppId(AppId);
-        city = await weatherService.GetCityLocation();
-        currentWeather = await weatherService.GetWeather();
-        forecastWeather = await weatherService.GetForecast();
-    }
 
     protected override async Task OnInitializedAsync()
     {
-        AppId = await weatherService.GetAppId();
         city = await weatherService.GetCityLocation();
         currentWeather = await weatherService.GetWeather();
         forecastWeather = await weatherService.GetForecast();

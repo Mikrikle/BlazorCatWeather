@@ -1,0 +1,33 @@
+﻿@inject IWeatherService weatherService
+
+<EditForm Model="@appIdModel" OnValidSubmit="@HandleAppIdForm" class="border rounded p-2">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Application ID</label>
+        <InputText id="name" class="form-control form-control-lg" @bind-Value="appIdModel.AppId" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+</EditForm>
+
+@code {
+    private class AppIdModel
+    {
+        public string AppId { get; set; }
+    };
+    private AppIdModel appIdModel = new();
+
+    private void HandleAppIdForm()
+    {
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        appIdModel.AppId = await weatherService.GetAppId();
+    }
+}
