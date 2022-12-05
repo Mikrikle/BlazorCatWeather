@@ -1,5 +1,11 @@
 ﻿@inject IWeatherService weatherService
 
+@if (Message != null)
+{
+    <div class="display-5 alert-danger">@Message</div>
+}
+
+
 @if (city == null || currentWeather == null || forecastWeather == null)
 {
     <p><em>Loading...</em></p>
@@ -99,11 +105,23 @@ else
     private GeocodingDto? city;
     private WeatherCurrentDto? currentWeather;
     private WeatherForecastDto? forecastWeather;
+    private string? Message{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        city = await weatherService.GetCityLocation();
-        currentWeather = await weatherService.GetWeather();
-        forecastWeather = await weatherService.GetForecast();
+        var city_or_error = await weatherService.GetCityLocation();
+        var current_weather_or_error = await weatherService.GetWeather();
+        var forecast_weather_or_error = await weatherService.GetForecast();
+        city = city_or_error.Response;
+        currentWeather = current_weather_or_error.Response;
+        forecastWeather = forecast_weather_or_error.Response;
+        Console.WriteLine(city_or_error.Error);
+        Console.WriteLine(city_or_error.StatusCode);
+        if(!city_or_error.IsSuccess || !current_weather_or_error.IsSuccess || !forecast_weather_or_error.IsSuccess)
+        {
+            Message = city_or_error.Error + 
+                " " + current_weather_or_error.Error + 
+                " " + forecast_weather_or_error.Error;
+        }
     }
 }

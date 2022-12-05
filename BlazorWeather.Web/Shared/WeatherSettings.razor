@@ -21,9 +21,9 @@
     };
     private AppIdModel appIdModel = new();
 
-    private void HandleAppIdForm()
+    private async void HandleAppIdForm()
     {
-
+        await weatherService.SetAppId(appIdModel.AppId);
     }
 
     protected override async Task OnInitializedAsync()
