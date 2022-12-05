@@ -1,8 +1,8 @@
 ﻿@inject IWeatherService weatherService
 
-@if (Message != null)
+@if (Errors != null)
 {
-    <div class="display-5 alert-danger">@Message</div>
+    <DisplayList CssClass="display-5 alert-danger" Items="Errors"></DisplayList>
 }
 
 
@@ -105,7 +105,7 @@ else
     private GeocodingDto? city;
     private WeatherCurrentDto? currentWeather;
     private WeatherForecastDto? forecastWeather;
-    private string? Message{ get; set; }
+    private List<string>? Errors{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -115,13 +115,15 @@ else
         city = city_or_error.Response;
         currentWeather = current_weather_or_error.Response;
         forecastWeather = forecast_weather_or_error.Response;
-        Console.WriteLine(city_or_error.Error);
-        Console.WriteLine(city_or_error.StatusCode);
         if(!city_or_error.IsSuccess || !current_weather_or_error.IsSuccess || !forecast_weather_or_error.IsSuccess)
         {
-            Message = city_or_error.Error + 
-                " " + current_weather_or_error.Error + 
-                " " + forecast_weather_or_error.Error;
+            Errors = new()
+            {
+                city_or_error.Error,
+                current_weather_or_error.Error,
+                forecast_weather_or_error.Error
+            };
+            Console.WriteLine(Errors[0]);
         }
     }
 }

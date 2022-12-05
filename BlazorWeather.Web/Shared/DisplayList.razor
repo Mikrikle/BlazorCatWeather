@@ -1,0 +1,14 @@
+﻿<div>
+    @foreach (string item in Items)
+    {
+        <div class="@CssClass">@item</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string CssClass { get; set; }
+
+    [Parameter]
+    public List<string> Items{ get; set; }
+}
