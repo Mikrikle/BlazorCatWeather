@@ -4,6 +4,6 @@ namespace BlazorWeather.Web.Services.Contracts
 {
     public interface IMeowFactService
     {
-        public Task<MeowFactDto?> GetFact();
+        public Task<ResponseOrError<MeowFactDto>> GetFact();
     }
 }

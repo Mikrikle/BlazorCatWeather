@@ -99,28 +99,3 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
-
-/* App css */
-.scrolling-wrapper-flexbox {
-    display: flex;
-    overflow-x: auto;
-    max-width: 600px;
-}
-    .scrolling-wrapper-flexbox::-webkit-scrollbar {
-        width: 10px;
-        background-color: #f9f9fd;
-    }
-
-    .scrolling-wrapper-flexbox::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: #3A0647;
-    }
-
-    .scrolling-wrapper-flexbox::-webkit-scrollbar-track {
-        border: solid 1px black;
-        border-radius: 10px;
-        background-color: #f9f9fd;
-    }
-    .scrolling-wrapper-flexbox card-flex {
-        flex: 0 0 auto;
-    }

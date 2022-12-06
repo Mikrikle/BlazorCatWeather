@@ -1,0 +1,42 @@
+﻿@inject ICatApiService catApiService
+
+@if (image == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <section>
+        <div class="d-flex justify-content-center pb-3">
+            <button style="border-radius: 35px;" class="w-100 btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCat" aria-expanded="false" aria-controls="collapseCat">
+                Факт дня
+            </button>
+        </div>
+    </section>
+
+    <section class="mb-2" @onclick=OnClickHandler>
+        <div class="collapse @Show" id="collapseCat">
+            <div class="card">
+
+                <MeowFact />
+
+                <img src="@image.Url" alt="Cat" style="max-width:600px; max-height:600px;">
+            </div>
+        </div>
+    </section>
+}
+
+@code {
+    private CatApiImageDto? image;
+    private string? Show { get; set; } = null;
+
+    private void OnClickHandler()
+    {
+        Show = (Show==null)?"show":null;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        image = (await catApiService.GetImage()).Response;
+    }
+}

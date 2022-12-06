@@ -16,6 +16,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        fact = await meowFactService.GetFact();
+        fact = (await meowFactService.GetFact()).Response;
     }
 }

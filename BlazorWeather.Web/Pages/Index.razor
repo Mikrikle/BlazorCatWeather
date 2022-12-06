@@ -1,8 +1,16 @@
 ﻿@page "/"
 <PageTitle>Weather</PageTitle>
 
-<WeatherWidget />
-<hr />
-<MeowFact />
-<hr />
-<CatApiImage />
+
+<div class="container p-3">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-8 col-lg-6">
+            <CatOfDay />
+            <WeatherWidget />
+            <WeatherForecastSmall />
+        </div>
+    </div>
+</div>
+
+<br />
+

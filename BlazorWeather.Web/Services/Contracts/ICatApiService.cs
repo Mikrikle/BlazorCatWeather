@@ -4,6 +4,6 @@ namespace BlazorWeather.Web.Services.Contracts
 {
     public interface ICatApiService
     {
-        public Task<CatApiImageDto?> GetImage();
+        public Task<ResponseOrError<CatApiImageDto>> GetImage();
     }
 }
