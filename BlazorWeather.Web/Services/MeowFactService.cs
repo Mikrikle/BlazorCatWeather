@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using BlazorWeather.Web.Dtos;
 using BlazorWeather.Web.Services.Contracts;
 using System.Net.Http.Json;
@@ -17,7 +16,7 @@ namespace BlazorWeather.Web.Services
         private const string FactKey = "Key_MeowFact_Fact";
         private const string UpdateTimeKey = "Key_MeowFact_UpdateTime";
 
-        private string Lang => CultureInfo.CurrentCulture.ThreeLetterISOLanguageName.ToString();
+        private string Lang = "rus";
 
         public MeowFactService(HttpClient httpClient, ILocalStorageService localStorageService)
         {

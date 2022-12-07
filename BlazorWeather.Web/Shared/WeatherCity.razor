@@ -1,0 +1,29 @@
+﻿@inject IWeatherService weatherService
+
+
+@if (city != null)
+{
+    <NavLink class="link-dark" href="cities">
+        @city.Local_names?["ru"]
+    </NavLink>
+} 
+else if(Error != null)
+{
+    <NavLink class="btn btn-outline-dark" href="cities">
+        <span class="oi oi-home" aria-hidden="true"></span> Select city
+    </NavLink>
+}
+
+@code {
+    private GeocodingDto? city;
+    private String? Error { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var city_or_error = await weatherService.GetUserCity();
+        if (city_or_error.IsSuccess)
+            city = city_or_error.Response;
+        else
+            Error = city_or_error.Error;
+    }
+}

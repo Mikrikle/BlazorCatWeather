@@ -1,0 +1,63 @@
+﻿@inject IWeatherService weatherService
+@inject NavigationManager navigationManager
+
+@if (city != null)
+{
+    <h5>Ваш город: @city.Local_names?["ru"]</h5>
+}
+
+<EditForm Model="@seLectCityModel" OnValidSubmit="@HandleValidSubmit">
+    <div class="mb-3">
+        <label for="name" class="form-label">Поиск по городам</label>
+        <InputText class="form-control" id="name" @bind-Value="seLectCityModel.Name" />
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-outline-dark" type="submit">Найти</button>
+    </div>
+</EditForm>
+
+@if (search != null)
+{
+    <div class="card border rounded p-3">
+        <div class="display-6">@search.Name</div>
+        <div class="mb-3">
+            @search.Country
+        </div>
+        <div class="mb-3">
+            @search.Lat
+            @search.Lon
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-outline-success" @onclick=HandleSubmit>Сменить город</button>
+        </div>
+
+    </div>
+}
+
+@code {
+    private GeocodingDto? city;
+    private GeocodingDto? search;
+
+    private class SeLectCityModel
+    {
+        public string Name { get; set; }
+    };
+    private SeLectCityModel seLectCityModel = new();
+
+    private async Task HandleValidSubmit()
+    {
+        search = (await weatherService.SearchCity(seLectCityModel.Name)).Response;
+    }
+
+    private async Task HandleSubmit()
+    {
+        await weatherService.SetUserCity(search);
+        navigationManager.NavigateTo("/");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        city = (await weatherService.GetUserCity()).Response;
+    }
+}

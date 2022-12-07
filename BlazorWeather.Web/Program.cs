@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazored.Modal;
 using BlazorWeather.Web;
 using BlazorWeather.Web.Services;
 using BlazorWeather.Web.Services.Contracts;
@@ -12,6 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredModal();
 
 builder.Services.AddScoped<IMeowFactService, MeowFactService>();
 builder.Services.AddScoped<ICatApiService, CatApiService>();

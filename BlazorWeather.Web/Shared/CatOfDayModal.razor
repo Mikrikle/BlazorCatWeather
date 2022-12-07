@@ -1,0 +1,26 @@
+﻿@inject ICatApiService catApiService
+
+@if (image == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row d-flex justify-content-center align-items-center text-center">
+        <div class="col-md-8 col-lg-6">
+            <MeowFact CssClass="h6"/>
+            <img src="@image.Url" alt="Cat" class="img-cover">
+        </div>
+    </div>
+}
+
+
+@code {
+    private CatApiImageDto? image;
+    private string? Show { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        image = (await catApiService.GetImage()).Response;
+    }
+}

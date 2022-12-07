@@ -5,6 +5,7 @@ namespace BlazorWeather.Web.Dtos
     public class WeatherForecastDto
     {
         public List<List> List { get; set; } = new();
+        public City City { get; set; }
     }
 
     public class List
@@ -19,5 +20,6 @@ namespace BlazorWeather.Web.Dtos
         public int Dt { get; set; }
         public double Pop { get; set; }
         public string DtTxt { get; set; }
+
     }
 }

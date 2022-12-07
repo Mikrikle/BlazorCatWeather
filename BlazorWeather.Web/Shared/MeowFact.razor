@@ -6,12 +6,15 @@
 }
 else
 {
-    <div class="container">
-        @fact?.Data.FirstOrDefault();
+    <div class="@CssClass">
+        @fact?.Data.FirstOrDefault()
     </div>
 }
 
 @code {
+    [Parameter]
+    public string CssClass { get; set; } = "";
+
     private MeowFactDto? fact;
 
     protected override async Task OnInitializedAsync()

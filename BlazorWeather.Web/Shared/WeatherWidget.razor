@@ -16,7 +16,7 @@ else
             <div class="card-body p-4">
 
                 <div class="d-flex">
-                    <h6 class="flex-grow-1"><WetaherCityInfo /></h6>
+                    <h6 class="flex-grow-1"> <WeatherCity /> </h6>
                     <h6>@DateConverter.UnixTimeToLocalDateTime(currentWeather.Dt).ToString("H:mm")</h6>
                 </div>
 
@@ -52,7 +52,7 @@ else
                         </div>
                     </div>
                     <div>
-                        <img src="@($"http://openweathermap.org/img/wn/{currentWeather.Weather.First().Icon}@2x.png")"
+                        <img src="@($"https://openweathermap.org/img/wn/{currentWeather.Weather.First().Icon}@2x.png")"
                          alt="currentWeather.Weather.First().Icon">
                     </div>
                 </div>

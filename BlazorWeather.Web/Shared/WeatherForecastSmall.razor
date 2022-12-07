@@ -10,12 +10,12 @@ else
         @foreach (var item in forecastWeather.List.Take(8))
         {
             <div class="card-flex m-1 text-center">
-                <span class="border rounded-pill bg-white border-3 p-1" style="position:relative; top:13px; z-index:1000;">@DateConverter.UnixTimeToLocalDateTime(item.Dt).ToString("H:mm")</span>
+                <span class="border rounded-pill bg-white border-3 p-1" style="position:relative; top:13px; z-index:2;">@DateConverter.UnixTimeToLocalDateTime(item.Dt).ToString("H:mm")</span>
                 <div class="card border-secondary" style="border-radius: 35px;">
                     <div class="pt-3 text-center">
                         <div class="d-flex flex-column align-items-center">
                             <span class="fs-4 font-weight-bold text-black-75">@item.Main.Temp°C</span>
-                            <img src="@($"http://openweathermap.org/img/wn/{@item.Weather.First().Icon}@2x.png")"
+                            <img src="@($"https://openweathermap.org/img/wn/{@item.Weather.First().Icon}@2x.png")"
                              style="max-width:100px; max-height:100px;"
                              alt="@item.Weather.First().Icon">
                         </div>

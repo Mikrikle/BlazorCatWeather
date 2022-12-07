@@ -63,4 +63,10 @@ namespace BlazorWeather.Web.Dtos
         public int Sunrise { get; set; }
         public int Sunset { get; set; }
     }
+
+    public class City
+    {
+        public string Name { get; set; }
+        public Coord Coord { get; set; }
+    }
 }
