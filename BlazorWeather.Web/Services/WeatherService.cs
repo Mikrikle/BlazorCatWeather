@@ -70,7 +70,7 @@ namespace BlazorWeather.Web.Services
             Console.WriteLine("API WEATHER: get local");
             Coord response_coord = response?.Coord ?? new Coord();
             long DtNow = DateConverter.DateTimeToUnixTime(DateTime.Now.ToUniversalTime());
-            if (response_coord.Lat != lat || response_coord.Lon != lon || DtNow - (response?.Dt ?? 0) > (15 * 60))
+            if (((int)response_coord.Lat) != (int)lat || (int)response_coord.Lon != (int)lon || DtNow - (response?.Dt ?? 0) > (15 * 60))
             {
                 var http_response = await httpClient.GetAsync(
                     $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}"
@@ -97,7 +97,7 @@ namespace BlazorWeather.Web.Services
             Console.WriteLine("API FORECAST: get local");
             Coord response_coord = response?.City?.Coord ?? new Coord();
             long DtNow = DateConverter.DateTimeToUnixTime(DateTime.Now.ToUniversalTime());
-            if (response_coord.Lat != lat || response_coord.Lon != lon || DtNow - (response?.WeatherList.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
+            if ((int)response_coord.Lat != (int)lat || (int)response_coord.Lon != (int)lon || DtNow - (response?.WeatherList.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
             {
                 var http_response = await httpClient.GetAsync(
                     $"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}"
