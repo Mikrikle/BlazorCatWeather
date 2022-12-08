@@ -1,0 +1,38 @@
+﻿@page "/forecast"
+@inject IWeatherService weatherService
+
+<h3>Прогноз погоды</h3>
+
+@if (forecastByDays == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var weather_lists in forecastByDays)
+    {
+        <Collapsable Title="@weather_lists.Key" Collapsed="true">
+            <ChildContent>
+                @foreach (var weather in weather_lists)
+                {
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-6 font-weight-bolder">@weather.Main.Temp</div>
+                        <div class="col-5">@weather.Main.FeelsLike</div>
+                    </div>
+                }
+            </ChildContent>
+        </Collapsable>
+    }
+}
+
+@code {
+    private WeatherForecastDto? forecastWeather;
+    private IEnumerable<IGrouping<string, WeatherList>>? forecastByDays;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecastWeather = (await weatherService.GetForecast()).Response;
+        forecastByDays = forecastWeather?.WeatherList.GroupBy(x => DateConverter.UnixTimeToLocalDateTime(x.Dt).ToShortDateString());
+    }
+}

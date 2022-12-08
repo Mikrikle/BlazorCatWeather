@@ -1,0 +1,41 @@
+﻿<div class="mb-3">
+    <div class="row">
+        <div class="btn-toolbar justify-content-between" role="toolbar">
+            @Title
+            @if (Collapsed)
+            {
+                <button class="btn btn-outline-dark" @onclick="@Toggle">
+                    <span class="oi oi-chevron-bottom mr-1" />
+                </button>
+
+            }
+            else
+            {
+                <button class="btn btn-outline-dark" @onclick="@Toggle">
+                    <span class="oi oi-chevron-top mr-1" />
+                </button>
+            }
+        </div>
+    </div>
+
+    @if (!Collapsed)
+    {
+        @ChildContent
+    }
+</div>
+
+
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public bool Collapsed { get; set; }
+    [Parameter]
+    public string Title { get; set; }
+
+    void Toggle()
+    {
+        Collapsed = !Collapsed;
+    }
+}

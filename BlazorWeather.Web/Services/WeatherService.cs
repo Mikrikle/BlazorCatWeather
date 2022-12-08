@@ -97,7 +97,7 @@ namespace BlazorWeather.Web.Services
             Console.WriteLine("API FORECAST: get local");
             Coord response_coord = response?.City?.Coord ?? new Coord();
             long DtNow = DateConverter.DateTimeToUnixTime(DateTime.Now.ToUniversalTime());
-            if (response_coord.Lat != lat || response_coord.Lon != lon || DtNow - (response?.List.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
+            if (response_coord.Lat != lat || response_coord.Lon != lon || DtNow - (response?.WeatherList.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
             {
                 var http_response = await httpClient.GetAsync(
                     $"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}"

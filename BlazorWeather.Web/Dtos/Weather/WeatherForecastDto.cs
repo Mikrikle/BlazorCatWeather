@@ -4,11 +4,12 @@ namespace BlazorWeather.Web.Dtos
 {
     public class WeatherForecastDto
     {
-        public List<List> List { get; set; } = new();
+        [JsonPropertyName("list")]
+        public List<WeatherList> WeatherList { get; set; } = new();
         public City City { get; set; }
     }
 
-    public class List
+    public class WeatherList
     {
         public List<Weather> Weather { get; set; }
         public Main Main { get; set; }
