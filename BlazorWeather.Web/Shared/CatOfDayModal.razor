@@ -1,10 +1,6 @@
 ﻿@inject ICatApiService catApiService
 
-@if (image == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
+@if (image != null)
 {
     <div class="row d-flex justify-content-center align-items-center text-center">
         <div class="col-md-8 col-lg-6">
@@ -21,6 +17,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        image = (await catApiService.GetImage()).Response;
+        try
+        {
+            image = await catApiService.GetImage();
+        }
+        catch
+        {
+            
+        }
     }
 }

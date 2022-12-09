@@ -15,6 +15,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredModal();
 
+builder.Services.AddScoped<IHttpDtoService, HttpDtoService>();
 builder.Services.AddScoped<IMeowFactService, MeowFactService>();
 builder.Services.AddScoped<ICatApiService, CatApiService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();

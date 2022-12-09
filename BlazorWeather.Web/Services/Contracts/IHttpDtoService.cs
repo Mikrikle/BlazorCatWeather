@@ -1,15 +1,16 @@
 ﻿using BlazorWeather.Web.Exceptions;
-using BlazorWeather.Web.Dtos;
 
 namespace BlazorWeather.Web.Services.Contracts
 {
-    public interface ICatApiService
+    public interface IHttpDtoService
     {
         /// <summary>
         /// 
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uri"></param>
         /// <returns></returns>
         /// <exception cref="ServiceResponseException"></exception>
-        public Task<CatApiImageDto> GetImage();
+        public Task<T> GetAsync<T>(string uri);
     }
 }

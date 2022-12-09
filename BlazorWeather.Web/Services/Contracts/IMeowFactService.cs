@@ -1,9 +1,15 @@
-﻿using BlazorWeather.Web.Dtos;
+﻿using BlazorWeather.Web.Exceptions;
+using BlazorWeather.Web.Dtos;
 
 namespace BlazorWeather.Web.Services.Contracts
 {
     public interface IMeowFactService
     {
-        public Task<ResponseOrError<MeowFactDto>> GetFact();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<MeowFactDto> GetFact();
     }
 }

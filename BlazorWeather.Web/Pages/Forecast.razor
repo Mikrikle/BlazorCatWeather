@@ -5,7 +5,14 @@
 
 @if (forecastByDays == null)
 {
-    <p><em>Loading...</em></p>
+    @if (error != null)
+    {
+        <ExceptionAlert ex="error"></ExceptionAlert>
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
 }
 else
 {
@@ -13,14 +20,55 @@ else
     {
         <Collapsable Title="@weather_lists.Key" Collapsed="true">
             <ChildContent>
-                @foreach (var weather in weather_lists)
-                {
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-6 font-weight-bolder">@weather.Main.Temp</div>
-                        <div class="col-5">@weather.Main.FeelsLike</div>
-                    </div>
-                }
+                <div class="d-flex justify-content-center flex-wrap">
+                    @foreach (var weather in weather_lists)
+                    {
+                        <div class="card p-1 m-1">
+                            <h6>@DateConverter.UnixTimeToLocalDateTime(weather.Dt).ToString("H:mm")</h6>
+
+                            <div class="small">Ощущается как</div>
+                            <div class="small">@weather.Main.FeelsLike°C</div>
+
+                            <div>
+                                <img src="@($"https://openweathermap.org/img/wn/{weather.Weather.First().Icon}@2x.png")"
+                         alt="currentWeather.Weather.First().Icon">
+                            </div>
+
+                            <div class="text-center">
+                                <span class="small text-black-75">@weather.Weather.First().Description</span>
+                                <div class="fs-4">@weather.Main.Temp°C</div>
+                                <div class="d-flex flex-row justify-content-center">
+                                    <span class="small text-black-75">
+                                        @weather.Main.TempMin°C
+                                        &nbsp;/&nbsp;
+                                        @weather.Main.TempMax°C
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <div class="flex-grow-1">
+                                <div>
+                                    <i class="fas fa-wind fa-fw"></i>
+                                    <span class="ms-1">@weather.Wind.Speed м/с</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-tint fa-fw"></i>
+                                    <span class="ms-1"> @weather.Main.Humidity% </span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-cloud fa-fw"></i>
+                                    <span class="ms-1"> @weather.Clouds.All% </span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-gauge fa-fw"></i>
+                                    <span class="ms-1"> @(Math.Round(weather.Main.Pressure * 0.750064)) мм рт.ст.</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
             </ChildContent>
         </Collapsable>
     }
@@ -28,11 +76,20 @@ else
 
 @code {
     private WeatherForecastDto? forecastWeather;
+    private ServiceResponseException? error;
     private IEnumerable<IGrouping<string, WeatherList>>? forecastByDays;
 
     protected override async Task OnInitializedAsync()
     {
-        forecastWeather = (await weatherService.GetForecast()).Response;
-        forecastByDays = forecastWeather?.WeatherList.GroupBy(x => DateConverter.UnixTimeToLocalDateTime(x.Dt).ToShortDateString());
+        try
+        {
+            forecastWeather = await weatherService.GetForecast();
+            forecastByDays = forecastWeather?.WeatherList.GroupBy(x => DateConverter.UnixTimeToLocalDateTime(x.Dt).ToShortDateString());
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
+
     }
 }

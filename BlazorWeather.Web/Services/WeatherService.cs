@@ -4,13 +4,14 @@ using BlazorWeather.Web.Services.Contracts;
 using BlazorWeather.Web.Utilites;
 using System.Net.Http.Json;
 using System.Net;
+using BlazorWeather.Web.Exceptions;
 
 namespace BlazorWeather.Web.Services
 {
     public class WeatherService : IWeatherService
     {
-        private readonly HttpClient httpClient;
         private readonly ILocalStorageService localStorageService;
+        private readonly IHttpDtoService httpDtoService;
 
         private const string currentWeatherKey = "Key_Weather_CurrentWeather";
         private const string forecastWeatherKey = "Key_Weather_ForecastWeather";
@@ -20,10 +21,10 @@ namespace BlazorWeather.Web.Services
         private string Lang = "ru";
         private async Task<string> getAppId() => await localStorageService.GetItemAsync<string>(appIdKey);
 
-        public WeatherService(HttpClient httpClient, ILocalStorageService localStorageService)
+        public WeatherService(ILocalStorageService localStorageService, IHttpDtoService httpDtoService)
         {
-            this.httpClient = httpClient;
             this.localStorageService = localStorageService;
+            this.httpDtoService = httpDtoService;
         }
 
         public async Task SetAppId(string appId)
@@ -36,16 +37,14 @@ namespace BlazorWeather.Web.Services
             return await localStorageService.GetItemAsync<string>(appIdKey);
         }
 
-        public async Task<ResponseOrError<GeocodingDto>> SearchCity(string city)
+        public async Task<GeocodingDto> SearchCity(string city)
         {
-            var http_response = await httpClient.GetAsync(
-                    $"https://api.openweathermap.org/geo/1.0/direct?q={city}&&limit=1&appid={await getAppId()}"
-                    );
-            if (!http_response.IsSuccessStatusCode)
-                return new(null, http_response.StatusCode, "Get city: Error");
-            var response = (await http_response.Content.ReadFromJsonAsync<GeocodingDto[]>())?
+            var response = (await httpDtoService.GetAsync<GeocodingDto[]>(
+                $"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={await getAppId()}"))
                 .FirstOrDefault();
-            return new(response);
+            if (response == null)
+                throw new ServiceResponseException("Not Found", HttpStatusCode.NotFound);
+            return response;
         }
 
         public async Task SetUserCity(GeocodingDto city)
@@ -53,68 +52,71 @@ namespace BlazorWeather.Web.Services
             await localStorageService.SetItemAsync(currentCityKey, city);
         }
 
-        public async Task<ResponseOrError<GeocodingDto>> GetUserCity()
+        public async Task<GeocodingDto> GetUserCity()
         {
             var response = await localStorageService.GetItemAsync<GeocodingDto>(currentCityKey);
             if (response == null)
-            {
-                return new(null, HttpStatusCode.BadRequest, "City not selected");
-            }
-            return new(response);
+                throw new ServiceResponseException("Not Found", HttpStatusCode.NotFound);
+            return response;
         }
 
 
-        public async Task<ResponseOrError<WeatherCurrentDto>> GetWeather(double lat, double lon)
+        public async Task<WeatherCurrentDto> GetWeather(double lat, double lon)
         {
             var response = await localStorageService.GetItemAsync<WeatherCurrentDto>(currentWeatherKey);
-            Console.WriteLine("API WEATHER: get local");
             Coord response_coord = response?.Coord ?? new Coord();
             long DtNow = DateConverter.DateTimeToUnixTime(DateTime.Now.ToUniversalTime());
-            if (((int)response_coord.Lat) != (int)lat || (int)response_coord.Lon != (int)lon || DtNow - (response?.Dt ?? 0) > (15 * 60))
+            if (response == null
+                || ((int)response_coord.Lat) != (int)lat || (int)response_coord.Lon != (int)lon
+                || DtNow - (response.Dt) > (15 * 60))
             {
-                var http_response = await httpClient.GetAsync(
-                    $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}"
-                    );
-                if (!http_response.IsSuccessStatusCode)
-                    return new(null, http_response.StatusCode, "Get Waether: Invalid API key");
-                Console.WriteLine("API WEATHER: update");
-                response = await http_response.Content.ReadFromJsonAsync<WeatherCurrentDto>();
+                response = await httpDtoService.GetAsync<WeatherCurrentDto>(
+                $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}");
                 await localStorageService.SetItemAsync(currentWeatherKey, response);
-
             }
-            return new(response);
+            return response;
         }
-        public async Task<ResponseOrError<WeatherCurrentDto>> GetWeather()
+        public async Task<WeatherCurrentDto> GetWeather()
         {
-            var geo = (await GetUserCity()).Response;
-            return await GetWeather(geo?.Lat ?? 0, geo?.Lon ?? 0);
+            try
+            {
+                var geo = await GetUserCity();
+                return await GetWeather(geo.Lat, geo.Lon);
+            }
+            catch
+            {
+                return await GetWeather(0, 0);
+            }
         }
 
 
-        public async Task<ResponseOrError<WeatherForecastDto>> GetForecast(double lat, double lon)
+        public async Task<WeatherForecastDto> GetForecast(double lat, double lon)
         {
             var response = await localStorageService.GetItemAsync<WeatherForecastDto>(forecastWeatherKey);
-            Console.WriteLine("API FORECAST: get local");
             Coord response_coord = response?.City?.Coord ?? new Coord();
             long DtNow = DateConverter.DateTimeToUnixTime(DateTime.Now.ToUniversalTime());
-            if ((int)response_coord.Lat != (int)lat || (int)response_coord.Lon != (int)lon || DtNow - (response?.WeatherList.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
+            if (response == null
+                || (int)response_coord.Lat != (int)lat || (int)response_coord.Lon != (int)lon
+                || DtNow - (response.WeatherList.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
             {
-                var http_response = await httpClient.GetAsync(
-                    $"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}"
-                    );
-                if (!http_response.IsSuccessStatusCode)
-                    return new(null, http_response.StatusCode, "Get Forecast: Invalid API key");
-                Console.WriteLine("API FORECAST: update");
-                response = await http_response.Content.ReadFromJsonAsync<WeatherForecastDto>();
+                response = await httpDtoService.GetAsync<WeatherForecastDto>(
+                $"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}");
                 await localStorageService.SetItemAsync(forecastWeatherKey, response);
-            }
 
-            return new(response);
+            }
+            return response;
         }
-        public async Task<ResponseOrError<WeatherForecastDto>> GetForecast()
+        public async Task<WeatherForecastDto> GetForecast()
         {
-            var geo = (await GetUserCity()).Response;
-            return await GetForecast(geo?.Lat ?? 0, geo?.Lon ?? 0);
+            try
+            {
+                var geo = await GetUserCity();
+                return await GetForecast(geo.Lat, geo.Lon);
+            }
+            catch
+            {
+                return await GetForecast(0, 0);
+            }
         }
 
     }

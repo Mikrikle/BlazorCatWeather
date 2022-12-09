@@ -3,7 +3,14 @@
 
 @if (image == null)
 {
-    <p><em>Loading...</em></p>
+    @if (error != null)
+    {
+        <ExceptionAlert ex="error"></ExceptionAlert>
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
 }
 else
 {
@@ -17,6 +24,8 @@ else
 
 @code {
     private CatApiImageDto? image;
+    private ServiceResponseException? error;
+
     private string? Show { get; set; } = null;
     ModalOptions options = new() {
         Size = ModalSize.Large,
@@ -25,6 +34,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        image = (await catApiService.GetImage()).Response;
+        try
+        {
+            image = await catApiService.GetImage();
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Blazored.LocalStorage;
+﻿using BlazorWeather.Web.Exceptions;
 using BlazorWeather.Web.Dtos;
 
 namespace BlazorWeather.Web.Services.Contracts
@@ -8,15 +8,50 @@ namespace BlazorWeather.Web.Services.Contracts
         public Task SetAppId(string appId);
         public Task<string> GetAppId();
 
-        public Task<ResponseOrError<GeocodingDto>> SearchCity(string city);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="city"></param>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<GeocodingDto> SearchCity(string city);
 
         public Task SetUserCity(GeocodingDto city);
-        public Task<ResponseOrError<GeocodingDto>> GetUserCity();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<GeocodingDto> GetUserCity();
 
-        public Task<ResponseOrError<WeatherCurrentDto>> GetWeather(double lat, double lon);
-        public Task<ResponseOrError<WeatherCurrentDto>> GetWeather();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<WeatherCurrentDto> GetWeather(double lat, double lon);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<WeatherCurrentDto> GetWeather();
 
-        public Task<ResponseOrError<WeatherForecastDto>> GetForecast(double lat, double lon);
-        public Task<ResponseOrError<WeatherForecastDto>> GetForecast();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<WeatherForecastDto> GetForecast(double lat, double lon);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<WeatherForecastDto> GetForecast();
     }
 }

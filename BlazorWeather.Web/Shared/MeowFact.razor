@@ -2,7 +2,14 @@
 
 @if (fact == null)
 {
-    <p><em>Loading...</em></p>
+    @if (error != null)
+    {
+        <ExceptionAlert ex="error"></ExceptionAlert>
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
 }
 else
 {
@@ -16,9 +23,17 @@ else
     public string CssClass { get; set; } = "";
 
     private MeowFactDto? fact;
+    private ServiceResponseException? error;
 
     protected override async Task OnInitializedAsync()
     {
-        fact = (await meowFactService.GetFact()).Response;
+        try
+        {
+            fact = await meowFactService.GetFact();
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
     }
 }

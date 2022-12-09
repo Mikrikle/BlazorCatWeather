@@ -16,6 +16,11 @@
     </div>
 </EditForm>
 
+@if (error != null)
+{
+    <ExceptionAlert ex="error"></ExceptionAlert>
+}
+
 @if (search != null)
 {
     <div class="card border rounded p-3">
@@ -37,6 +42,7 @@
 @code {
     private GeocodingDto? city;
     private GeocodingDto? search;
+    private ServiceResponseException? error;
 
     private class SeLectCityModel
     {
@@ -46,7 +52,15 @@
 
     private async Task HandleValidSubmit()
     {
-        search = (await weatherService.SearchCity(seLectCityModel.Name)).Response;
+        try
+        {
+            search = await weatherService.SearchCity(seLectCityModel.Name);
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
+
     }
 
     private async Task HandleSubmit()
@@ -58,6 +72,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        city = (await weatherService.GetUserCity()).Response;
+        try
+        {
+            city = await weatherService.GetUserCity();
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
     }
 }

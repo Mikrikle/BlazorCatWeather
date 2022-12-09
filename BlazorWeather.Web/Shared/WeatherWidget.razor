@@ -1,13 +1,15 @@
 ﻿@inject IWeatherService weatherService
 
-@if (Errors != null)
-{
-    <DisplayList CssClass="display-5 alert-danger" Items="Errors"></DisplayList>
-}
-
 @if (currentWeather == null)
 {
-    <p><em>Loading...</em></p>
+    if (error != null)
+    {
+        <ExceptionAlert ex="error"></ExceptionAlert>
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
 }
 else
 {
@@ -73,19 +75,17 @@ else
 
 @code {
     private WeatherCurrentDto? currentWeather;
-    private List<string>? Errors { get; set; }
+    private ServiceResponseException? error;
 
     protected override async Task OnInitializedAsync()
     {
-        var current_weather_or_error = await weatherService.GetWeather();
-        currentWeather = current_weather_or_error.Response;
-        if (!current_weather_or_error.IsSuccess)
+        try
         {
-            Errors = new()
-            {
-                current_weather_or_error.Error,
-            };
-            Console.WriteLine(Errors[0]);
+            currentWeather = await weatherService.GetWeather();
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
         }
     }
 }

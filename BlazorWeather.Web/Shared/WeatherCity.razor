@@ -7,7 +7,7 @@
         @city.Local_names?["ru"]
     </NavLink>
 } 
-else if(Error != null)
+else if(error != null)
 {
     <NavLink class="btn btn-outline-dark" href="cities">
         <span class="oi oi-home" aria-hidden="true"></span> Select city
@@ -16,14 +16,17 @@ else if(Error != null)
 
 @code {
     private GeocodingDto? city;
-    private String? Error { get; set; }
+    private ServiceResponseException? error;
 
     protected override async Task OnInitializedAsync()
     {
-        var city_or_error = await weatherService.GetUserCity();
-        if (city_or_error.IsSuccess)
-            city = city_or_error.Response;
-        else
-            Error = city_or_error.Error;
+        try
+        {
+            city = await weatherService.GetUserCity();
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
     }
 }

@@ -2,44 +2,39 @@
 using BlazorWeather.Web.Dtos;
 using BlazorWeather.Web.Services.Contracts;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
-using static BlazorWeather.Web.Shared.MeowFact;
-using static System.Net.WebRequestMethods;
 
 namespace BlazorWeather.Web.Services
 {
     public class MeowFactService : IMeowFactService
     {
-        private readonly HttpClient httpClient;
         private readonly ILocalStorageService localStorageService;
+        private readonly IHttpDtoService httpDtoService;
 
         private const string FactKey = "Key_MeowFact_Fact";
         private const string UpdateTimeKey = "Key_MeowFact_UpdateTime";
 
         private string Lang = "rus";
 
-        public MeowFactService(HttpClient httpClient, ILocalStorageService localStorageService)
+        public MeowFactService(ILocalStorageService localStorageService, IHttpDtoService httpDtoService)
         {
-            this.httpClient = httpClient;
             this.localStorageService = localStorageService;
+            this.httpDtoService = httpDtoService;
         }
 
-        public async Task<ResponseOrError<MeowFactDto>> GetFact()
+        public async Task<MeowFactDto> GetFact()
         {
 
             var response = await localStorageService.GetItemAsync<MeowFactDto>(FactKey);
             var updated = await localStorageService.GetItemAsync<DateTime>(UpdateTimeKey);
-            if (response == null || (DateTime.Now.ToUniversalTime() - updated).Hours > 12)
+            if (response == null 
+                || (DateTime.Now.ToUniversalTime() - updated).Hours > 12)
             {
-                var http_response = await httpClient.GetAsync($"https://meowfacts.herokuapp.com/?lang={Lang}");
-                if (!http_response.IsSuccessStatusCode)
-                    return new(null, http_response.StatusCode, "CatApi:Error");
-
-                response = await http_response.Content.ReadFromJsonAsync<MeowFactDto>();
+                response = await httpDtoService.GetAsync<MeowFactDto>(
+                    $"https://meowfacts.herokuapp.com/?lang={Lang}");
                 await localStorageService.SetItemAsync(FactKey, response);
                 await localStorageService.SetItemAsync(UpdateTimeKey, DateTime.Now.ToUniversalTime());
             }
-            return new(response);
+            return response;
         }
     }
 }

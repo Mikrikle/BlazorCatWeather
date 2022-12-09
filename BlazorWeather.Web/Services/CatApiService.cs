@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using BlazorWeather.Web.Dtos;
+using BlazorWeather.Web.Exceptions;
 using BlazorWeather.Web.Services.Contracts;
 using System.Net;
 using System.Net.Http.Json;
@@ -8,33 +9,34 @@ namespace BlazorWeather.Web.Services
 {
     public class CatApiService : ICatApiService
     {
-        private readonly HttpClient httpClient;
+        private readonly IHttpDtoService httpDtoService;
         private readonly ILocalStorageService localStorageService;
 
         private const string CatKey = "Key_CatApi_Cat";
         private const string UpdateTimeKey = "Key_CatApi_UpdateTime";
 
-        public CatApiService(HttpClient httpClient, ILocalStorageService localStorageService)
+        public CatApiService(ILocalStorageService localStorageService, IHttpDtoService httpDtoService)
         {
-            this.httpClient = httpClient;
             this.localStorageService = localStorageService;
+            this.httpDtoService = httpDtoService;
         }
 
-        public async Task<ResponseOrError<CatApiImageDto>> GetImage()
+        public async Task<CatApiImageDto> GetImage()
         {
             var response = await localStorageService.GetItemAsync<CatApiImageDto>(CatKey);
             var updated = await localStorageService.GetItemAsync<DateTime>(UpdateTimeKey);
-            if (response == null || (DateTime.Now.ToUniversalTime() - updated).Hours > 1)
+            if (response == null 
+                || (DateTime.Now.ToUniversalTime() - updated).Hours > 1)
             {
-                var http_response = await httpClient.GetAsync("https://api.thecatapi.com/v1/images/search");
-                if (!http_response.IsSuccessStatusCode)
-                    return new(null, http_response.StatusCode, "CatApi:Error");
 
-                response = (await http_response.Content.ReadFromJsonAsync<CatApiImageDto[]>())?.FirstOrDefault();
+                response = (await httpDtoService.GetAsync<CatApiImageDto[]>("https://api.thecatapi.com/v1/images/search"))
+                    .FirstOrDefault();
+                if (response == null)
+                    throw new ServiceResponseException("Not Found", HttpStatusCode.NotFound);
                 await localStorageService.SetItemAsync(CatKey, response);
                 await localStorageService.SetItemAsync(UpdateTimeKey, DateTime.Now.ToUniversalTime());
             }
-            return new(response);
+            return response;
         }
     }
 }

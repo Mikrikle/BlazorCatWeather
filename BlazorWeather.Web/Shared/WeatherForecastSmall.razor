@@ -2,7 +2,14 @@
 
 @if (forecastWeather == null)
 {
-    <p><em>Loading...</em></p>
+    @if (error != null)
+    {
+        <ExceptionAlert ex="error"></ExceptionAlert>
+    }
+    else
+    {
+        <p><em>Loading...</em></p>
+    }
 }
 else
 {<section>
@@ -28,9 +35,17 @@ else
 }
 @code {
     private WeatherForecastDto? forecastWeather;
+    private ServiceResponseException? error;
 
     protected override async Task OnInitializedAsync()
     {
-        forecastWeather = (await weatherService.GetForecast()).Response;
+        try
+        {
+            forecastWeather = await weatherService.GetForecast();
+        }
+        catch (ServiceResponseException e)
+        {
+            error = e;
+        }
     }
 }
