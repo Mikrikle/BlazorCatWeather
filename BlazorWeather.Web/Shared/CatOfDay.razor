@@ -1,5 +1,4 @@
 ﻿@inject ICatApiService catApiService
-@inject IModalService modelService
 
 @if (image == null)
 {
@@ -15,22 +14,24 @@
 else
 {
     <div class="mb-3">
-        <button @onclick="@(() => modelService.Show<CatOfDayModal>("Факт дня", options))" class="btn btn-outline-dark w-100"
-            style="border-radius: 35px;">
+        <button @onclick="@(() => ModalService.Show<CatOfDayModal>("Факт дня", options))" class="btn btn-primary w-100 rounded-5">
             Факт дня
         </button>
     </div>
 }
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; } = default!;
     private CatApiImageDto? image;
     private ServiceResponseException? error;
 
     private string? Show { get; set; } = null;
-    ModalOptions options = new() {
-        Size = ModalSize.Large,
-        Position = ModalPosition.Middle
-    };
+    ModalOptions options = new()
+        {
+            Size = ModalSize.Large,
+            Position = ModalPosition.Middle,
+            Class = "modal-class"
+        };
 
     protected override async Task OnInitializedAsync()
     {

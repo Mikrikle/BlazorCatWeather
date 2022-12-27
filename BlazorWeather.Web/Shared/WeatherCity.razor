@@ -3,14 +3,14 @@
 
 @if (city != null)
 {
-    <NavLink class="link-dark" href="cities">
+    <NavLink class="link-light" href="cities">
         @city.Local_names?["ru"]
     </NavLink>
 } 
 else if(error != null)
 {
-    <NavLink class="btn btn-outline-dark" href="cities">
-        <span class="oi oi-home" aria-hidden="true"></span> Select city
+    <NavLink class="btn btn-outline-light" href="cities">
+        <span class="oi oi-home" aria-hidden="true"></span> Выбрать город
     </NavLink>
 }
 

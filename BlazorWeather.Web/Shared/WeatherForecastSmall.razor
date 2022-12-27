@@ -12,13 +12,14 @@
     }
 }
 else
-{<section>
+{
+<section>
     <div class="scrolling-wrapper-flexbox pb-2">
         @foreach (var item in forecastWeather.WeatherList.Take(8))
         {
-            <div class="card-flex m-1 text-center">
-                <span class="border rounded-pill bg-white border-3 p-1" style="position:relative; top:13px; z-index:2;">@DateConverter.UnixTimeToLocalDateTime(item.Dt).ToString("H:mm")</span>
-                <div class="card border-secondary" style="border-radius: 35px;">
+            <div class="m-1 text-center">
+                <span class="rounded-pill p-1">@DateConverter.UnixTimeToLocalDateTime(item.Dt).ToString("H:mm")</span>
+                <div class="card rounded-5">
                     <div class="pt-3 text-center">
                         <div class="d-flex flex-column align-items-center">
                             <span class="fs-4 font-weight-bold text-black-75">@item.Main.Temp°C</span>

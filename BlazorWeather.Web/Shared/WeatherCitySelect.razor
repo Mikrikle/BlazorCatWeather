@@ -3,16 +3,21 @@
 
 @if (city != null)
 {
-    <h5>Ваш город: @city.Local_names?["ru"]</h5>
+    <h3>Ваш город: @city.Local_names?["ru"]</h3>
+}
+else
+{
+     <h3>Ваш город не выбран</h3>
 }
 
+<hr />
+<h5>Вы можете сменить город</h5>
 <EditForm Model="@seLectCityModel" OnValidSubmit="@HandleValidSubmit">
     <div class="mb-3">
-        <label for="name" class="form-label">Поиск по городам</label>
-        <InputText class="form-control" id="name" @bind-Value="seLectCityModel.Name" />
+        <InputText class="form-control text-dark" id="name" @bind-Value="seLectCityModel.Name" />
     </div>
     <div class="mb-3">
-        <button class="btn btn-outline-dark" type="submit">Найти</button>
+        <button class="btn btn-primary" type="submit">Найти</button>
     </div>
 </EditForm>
 
@@ -33,7 +38,7 @@
             @search.Lon
         </div>
         <div class="mb-3">
-            <button class="btn btn-outline-success" @onclick=HandleSubmit>Сменить город</button>
+            <button class="btn btn-primary" @onclick=HandleSubmit>Выбрать город</button>
         </div>
 
     </div>
@@ -52,6 +57,7 @@
 
     private async Task HandleValidSubmit()
     {
+        error = null;
         try
         {
             search = await weatherService.SearchCity(seLectCityModel.Name);
@@ -78,7 +84,6 @@
         }
         catch (ServiceResponseException e)
         {
-            error = e;
         }
     }
 }

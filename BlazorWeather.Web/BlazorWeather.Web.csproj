@@ -13,12 +13,10 @@
 
   <ItemGroup>
     <None Remove="Shared\CatOfDayModal.razor.css" />
-    <None Remove="Shared\WeatherForecastSmall.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Shared\CatOfDayModal.razor.css" />
-    <Content Include="Shared\WeatherForecastSmall.razor.css" />
   </ItemGroup>
 
   <ItemGroup>

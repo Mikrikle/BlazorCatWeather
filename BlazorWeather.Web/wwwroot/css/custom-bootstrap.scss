@@ -12,25 +12,14 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 
-$light: $gray-900 !default;
-$dark: $gray-200 !default;
+// Colors
+$primary: #00000020 !default;
 
 // Body
-$body-color: #FFFFFF; // text color
+$body-color: #FFFFFF !default; // text color
 
 // Cards
-$card-bg: #0002ff10;
+$card-bg: #FFFFFF20 !default;
 
 
-
-@import "../bootstrap/scss/_functions";
-@import "../bootstrap/scss/_variables";
-
-$custom-theme-colors: ();
-
-$theme-colors: map-merge($custom-theme-colors, $theme-colors);
-
-// Import bootstrap
 @import "../bootstrap/scss/bootstrap";
-
-
