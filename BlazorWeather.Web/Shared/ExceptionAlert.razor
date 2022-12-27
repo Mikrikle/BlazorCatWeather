@@ -1,8 +1,19 @@
 ﻿@if(ex != null)
 {
 <div class="alert alert-danger" role="alert">
-  <h4 class="alert-heading">@ex.StatusCode.ToString()</h4>
-  <p>@ex.Message</p>
+        @if(ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            <h4 class="alert-heading">Вы не авторизированы</h4>
+            <p>Укажите "Open weahter ID" в настройках</p>
+             <NavLink class="btn btn-outline-danger" href="settings">
+                <span class="oi oi-cog" aria-hidden="true"></span> Перейти
+            </NavLink>
+        }
+        else
+        {
+            <h4 class="alert-heading">@ex.StatusCode.ToString()</h4>
+            <p>@ex.Message</p>
+        }
 </div>
 }
 
