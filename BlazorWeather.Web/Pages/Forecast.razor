@@ -17,56 +17,56 @@
 else
 {
     <div class="container-lg" style="max-width: 800px;">
-    @foreach (var weather_lists in forecastByDays)
-    {
+        @foreach (var weather_lists in forecastByDays)
+        {
             <Collapsable Title="@weather_lists.Key" Collapsed="getCollapseOnce()">
-            <ChildContent>
-                <div class="scrolling-wrapper-flexbox pb-2">
-                    @foreach (var weather in weather_lists)
-                    {
+                <ChildContent>
+                    <div class="scrolling-wrapper-flexbox pb-2">
+                        @foreach (var weather in weather_lists)
+                        {
 
-                        <div class="m-1 text-center">
-                            <span class="rounded-pill p-1">@DateConverter.UnixTimeToLocalDateTime(weather.Dt).ToString("H:mm")</span>
-                            <div class="card rounded-5 p-1" style="width:150px;">
+                            <div class="m-1 text-center">
+                                <span class="rounded-pill p-1">@DateConverter.UnixTimeToLocalDateTime(weather.Dt).ToString("H:mm")</span>
+                                <div class="card rounded-5 p-1" style="width:150px;">
 
-                                <div сlass="text-center">
-                                    <img src="@($"https://openweathermap.org/img/wn/{weather.Weather.First().Icon}@2x.png")"
-                             alt="currentWeather.Weather.First().Icon">
-                                </div>
-
-                                <div class="text-center">
-                                    <span style="font-size:0.7em;">@weather.Weather.First().Description</span>
-                                    <div class="fs-4">@weather.Main.Temp°C</div>
-                                    <span class="small text-nowrap">
-                                        @weather.Main.TempMin°C
-                                        &nbsp;/&nbsp;
-                                        @weather.Main.TempMax°C
-                                    </span>
-                                </div>
-
-                                <div class="flex-grow-1">
-                                    <div>
-                                        <i class="fas fa-wind fa-fw"></i>
-                                        <span class="ms-1">@weather.Wind.Speed м/с</span>
+                                    <div сlass="text-center">
+                                        <img src="@($"https://openweathermap.org/img/wn/{weather.Weather.First().Icon}@2x.png")"
+                                 alt="currentWeather.Weather.First().Icon">
                                     </div>
-                                    <div>
-                                        <i class="fas fa-tint fa-fw"></i>
-                                        <span class="ms-1"> @weather.Main.Humidity% </span>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-cloud fa-fw"></i>
-                                        <span class="ms-1"> @weather.Clouds.All% </span>
-                                    </div>
-                                </div>
 
+                                    <div class="text-center">
+                                        <span style="font-size:0.7em;">@weather.Weather.First().Description</span>
+                                        <div class="fs-4">@weather.Main.Temp°C</div>
+                                        <span class="small text-nowrap">
+                                            @weather.Main.TempMin°C
+                                            &nbsp;/&nbsp;
+                                            @weather.Main.TempMax°C
+                                        </span>
+                                    </div>
+
+                                    <div class="flex-grow-1">
+                                        <div>
+                                            <i class="fas fa-wind fa-fw"></i>
+                                            <span class="ms-1">@weather.Wind.Speed м/с</span>
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-tint fa-fw"></i>
+                                            <span class="ms-1"> @weather.Main.Humidity% </span>
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-cloud fa-fw"></i>
+                                            <span class="ms-1"> @weather.Clouds.All% </span>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
 
-            </ChildContent>
-        </Collapsable>
-    }
+                </ChildContent>
+            </Collapsable>
+        }
     </div>
 }
 
@@ -97,6 +97,9 @@ else
         catch (ServiceResponseException e)
         {
             error = e;
+        }
+        catch(Exception e)
+        {
         }
 
     }
