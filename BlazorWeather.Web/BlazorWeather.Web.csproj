@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Shared\CatOfDayModal.razor.css" />
     <None Remove="Shared\WeatherForecastSmall.razor.css" />
   </ItemGroup>
@@ -15,6 +19,10 @@
   <ItemGroup>
     <Content Include="Shared\CatOfDayModal.razor.css" />
     <Content Include="Shared\WeatherForecastSmall.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
