@@ -1,0 +1,18 @@
+﻿<div class="m-1 text-center">
+    <span class="rounded-pill p-1">@DateConverter.UnixTimeToLocalDateTime(WeatherItem.Dt).ToString("H:mm")</span>
+    <div class="card rounded-5">
+        <div class="pt-3 text-center">
+            <div class="d-flex flex-column align-items-center">
+                <span class="fs-4 font-weight-bold text-black-75">@WeatherItem.Main.Temp°C</span>
+                <img src="@($"https://openweathermap.org/img/wn/{@WeatherItem.Weather.First().Icon}@2x.png")"
+                    style="max-width:100px; max-height:100px;"
+                    alt="@WeatherItem.Weather.First().Icon">
+            </div>
+        </div>
+    </div>
+</div>
+    
+@code {
+    [Parameter]
+    public WeatherList WeatherItem { get; set; }
+}

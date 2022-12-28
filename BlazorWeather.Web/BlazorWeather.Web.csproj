@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Shared\CatOfDayModal.razor.css" />
+    <None Remove="Shared\MeowFact\CatOfDayModal.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Shared\CatOfDayModal.razor.css" />
+    <Content Include="Shared\MeowFact\CatOfDayModal.razor.css" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,41 @@
+﻿<div class="m-1 text-center">
+    <span class="rounded-pill p-1">@DateConverter.UnixTimeToLocalDateTime(WeatherItem.Dt).ToString("H:mm")</span>
+    <div class="card rounded-5 p-1" style="width:150px;">
+
+        <div сlass="text-center">
+            <img src="@($"https://openweathermap.org/img/wn/{WeatherItem.Weather.First().Icon}@2x.png")"
+                 alt="currentWeather.Weather.First().Icon">
+        </div>
+
+        <div class="text-center">
+            <span style="font-size:0.7em;">@WeatherItem.Weather.First().Description</span>
+            <div class="fs-4">@WeatherItem.Main.Temp°C</div>
+            <span class="small text-nowrap">
+                @WeatherItem.Main.TempMin°C
+                &nbsp;/&nbsp;
+                @WeatherItem.Main.TempMax°C
+            </span>
+        </div>
+
+        <div class="flex-grow-1">
+            <div>
+                <i class="fas fa-wind fa-fw"></i>
+                <span class="ms-1">@WeatherItem.Wind.Speed м/с</span>
+            </div>
+            <div>
+                <i class="fas fa-tint fa-fw"></i>
+                <span class="ms-1"> @WeatherItem.Main.Humidity% </span>
+            </div>
+            <div>
+                <i class="fas fa-cloud fa-fw"></i>
+                <span class="ms-1"> @WeatherItem.Clouds.All% </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public WeatherList WeatherItem { get; set; }
+}
