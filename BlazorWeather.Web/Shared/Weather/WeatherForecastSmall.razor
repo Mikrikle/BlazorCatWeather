@@ -3,7 +3,11 @@
     <div class="card rounded-5">
         <div class="pt-3 text-center">
             <div class="d-flex flex-column align-items-center">
-                <span class="fs-4 font-weight-bold text-black-75">@WeatherItem.Main.Temp°C</span>
+                <span class="fs-4 font-weight-bold">@WeatherItem.Main.Temp°C</span>
+                <div>
+                    <i class="small fas fa-users fa-fw"></i>
+                    <span class="small">@WeatherItem.Main.FeelsLike°C</span>
+                </div>
                 <img src="@($"https://openweathermap.org/img/wn/{@WeatherItem.Weather.First().Icon}@2x.png")"
                     style="max-width:100px; max-height:100px;"
                     alt="@WeatherItem.Weather.First().Icon">

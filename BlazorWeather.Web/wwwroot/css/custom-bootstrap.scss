@@ -14,12 +14,16 @@ $black: #000 !default;
 
 // Colors
 $primary: #00000020 !default;
+$secondary: #00000000 !default;
 
 // Body
 $body-color: #FFFFFF !default; // text color
 
 // Cards
 $card-bg: #FFFFFF20 !default;
+
+// Buttons
+$btn-border-width: 0;
 
 
 @import "../bootstrap/scss/bootstrap";

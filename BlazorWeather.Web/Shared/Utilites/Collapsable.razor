@@ -1,19 +1,14 @@
-﻿<div class="mb-3">
-    <div class="row">
-        <div class="btn-toolbar  justify-content-between" role="toolbar">
-            <span  class="fs-4">@Title</span>
+﻿<div class="mx-2">
+    <div class="row px-1">
+        <div class="btn-toolbar btn btn-secondary justify-content-between rounded-5" @onclick="@Toggle">
+            <span class="fs-4">@Title</span>
             @if (!Collapsed)
             {
-                <button class="btn btn-outline-light" @onclick="@Toggle">
-                    <span class="oi oi-chevron-bottom mr-1" />
-                </button>
-
+                <span class="oi oi-chevron-bottom m-2" />
             }
             else
             {
-                <button class="btn btn-outline-light" @onclick="@Toggle">
-                    <span class="oi oi-chevron-top mr-1" />
-                </button>
+                <span class="oi oi-chevron-top m-2" />
             }
         </div>
     </div>

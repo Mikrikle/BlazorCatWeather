@@ -16,15 +16,17 @@ else
     <div class="container-lg" style="max-width: 800px;">
         @foreach (var weather_lists in forecastByDays)
         {
-            <Collapsable Title="@weather_lists.Key" Collapsed="getCollapseOnce()">
-                <div class="scrolling-wrapper-flexbox pb-2">
-                    @foreach (var weather in weather_lists)
-                    {
+            <div class="card m-1 rounded-5 p-1">
+                <Collapsable Title="@weather_lists.Key" Collapsed="GetCollapseOnce()">
+                    <div class="scrolling-wrapper-flexbox pb-2">
+                        @foreach (var weather in weather_lists)
+                        {
 
-                        <WeatherForecastDetail WeatherItem="weather" />
-                    }
-                </div>
-            </Collapsable>
+                            <WeatherForecastDetail WeatherItem="weather" />
+                        }
+                    </div>
+                </Collapsable>
+            </div>
         }
     </div>
 }
@@ -35,7 +37,7 @@ else
     private IEnumerable<IGrouping<string, WeatherList>>? forecastByDays;
 
     private bool isCollapsed = false;
-    private bool getCollapseOnce()
+    private bool GetCollapseOnce()
     {
         if (!isCollapsed)
         {
@@ -51,7 +53,8 @@ else
         try
         {
             forecastWeather = await weatherService.GetForecast();
-            forecastByDays = forecastWeather?.WeatherList.GroupBy(x => DateConverter.UnixTimeToLocalDateTime(x.Dt).ToShortDateString());
+            var culture = new System.Globalization.CultureInfo("ru-RU");
+            forecastByDays = forecastWeather?.WeatherList.GroupBy(x => GetDayNameAndDate(x.Dt));
         }
         catch (ServiceResponseException e)
         {
@@ -62,4 +65,12 @@ else
         }
 
     }
+
+    private string GetDayNameAndDate(int dt)
+    {
+        var culture = new System.Globalization.CultureInfo("ru-RU");
+        var date = DateConverter.UnixTimeToLocalDateTime(dt);
+        return $"{date.ToString("dd/MM")}  {culture.DateTimeFormat.GetDayName(date.DayOfWeek)}";
+}
+
 }
