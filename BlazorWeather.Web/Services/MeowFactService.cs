@@ -23,11 +23,10 @@ namespace BlazorWeather.Web.Services
 
         public async Task<MeowFactDto> GetFact()
         {
-
             var response = await localStorageService.GetItemAsync<MeowFactDto>(FactKey);
             var updated = await localStorageService.GetItemAsync<DateTime>(UpdateTimeKey);
             if (response == null 
-                || (DateTime.Now.ToUniversalTime() - updated).Hours > 12)
+                || (DateTime.Now.ToUniversalTime() - updated) > TimeSpan.FromHours(6))
             {
                 response = await httpDtoService.GetAsync<MeowFactDto>(
                     $"https://meowfacts.herokuapp.com/?lang={Lang}");

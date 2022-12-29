@@ -26,7 +26,7 @@ namespace BlazorWeather.Web.Services
             var response = await localStorageService.GetItemAsync<CatApiImageDto>(CatKey);
             var updated = await localStorageService.GetItemAsync<DateTime>(UpdateTimeKey);
             if (response == null 
-                || (DateTime.Now.ToUniversalTime() - updated).Hours > 1)
+                || (DateTime.Now.ToUniversalTime() - updated) > TimeSpan.FromHours(1))
             {
 
                 response = (await httpDtoService.GetAsync<CatApiImageDto[]>("https://api.thecatapi.com/v1/images/search"))
