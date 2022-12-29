@@ -1,0 +1,30 @@
+﻿@inject IWeatherService weatherService
+
+@code {
+    [CascadingParameter] public IModalService ModalService { get; set; } = default!;
+    private CatApiImageDto? image;
+    private ServiceResponseException? error;
+
+    ModalOptions options = new()
+        {
+            Size = ModalSize.Large,
+            Position = ModalPosition.Middle,
+            Class = "modal-class bg-gradient-dark-smooth"
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        string? appId = await weatherService.GetAppId();
+        if (String.IsNullOrEmpty(appId))
+        {
+            var messageForm = ModalService.Show<LoginModal>("Регистрация", options);
+            var result = await messageForm.Result;
+            string? appid = result?.Data?.ToString();
+            if (result != null && appid != null && result.Confirmed)
+            {
+                await weatherService.SetAppId(appid);
+            }
+        }
+
+    }
+}

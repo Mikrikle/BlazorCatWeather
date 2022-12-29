@@ -9,7 +9,6 @@ main {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgba(35,0,52,1) 0%, rgba(97,11,98,1) 100%), url('css/cat.svg');
     background-size: cover, 100px 200px;
     background-blend-mode: overlay;
 }

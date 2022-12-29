@@ -71,6 +71,5 @@ else
         var culture = new System.Globalization.CultureInfo("ru-RU");
         var date = DateConverter.UnixTimeToLocalDateTime(dt);
         return $"{date.ToString("dd/MM")}  {culture.DateTimeFormat.GetDayName(date.DayOfWeek)}";
-}
-
+    }
 }

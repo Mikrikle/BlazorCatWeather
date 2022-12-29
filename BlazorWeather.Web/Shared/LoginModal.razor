@@ -1,0 +1,35 @@
+﻿@inject IWeatherService weatherService
+
+<EditForm Model="@appIdModel" OnValidSubmit="@SubmitForm" class="p-2">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="text-center mb-3 p-2">
+        <h3>Добро пожаловать</h3>
+        <hr />
+        <label for="name" class="form-label">Для получения погоды необходимо указать <br /> Open weahter application ID</label>
+        <InputText id="name" class="form-control form-control-lg text-dark" @bind-Value="appIdModel.AppId" />
+        <div class="btn-toolbar justify-content-between mt-3" role="group">
+            <button type="submit" class="border rounded-5 btn btn-lg btn-primary w-50">Ок</button>
+            <button type="submit" class="border rounded-5 btn btn-lg btn-primary w-50" @onclick="Cancel">Отмена</button>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    private async Task SubmitForm() => await BlazoredModal.CloseAsync(ModalResult.Ok(appIdModel.AppId));
+    private async Task Cancel() => await BlazoredModal.CancelAsync();
+
+    private class AppIdModel
+    {
+        public string AppId { get; set; }
+    };
+    private AppIdModel appIdModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        appIdModel.AppId = await weatherService.GetAppId();
+    }
+}
