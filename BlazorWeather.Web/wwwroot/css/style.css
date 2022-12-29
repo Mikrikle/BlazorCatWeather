@@ -5,7 +5,7 @@
 }
 
 .bg-gradient-dark {
-    background-image: linear-gradient(45deg, rgba(35,0,52,1) 0%, rgba(97,11,98,1) 100%), url('cat.svg');
+    background: linear-gradient(45deg, rgba(35,0,52,1) 0%, rgba(97,11,98,1) 100%), url('cat.svg');
 }
 
 .bg-gradient-light {
