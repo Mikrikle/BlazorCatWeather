@@ -13,11 +13,11 @@
 }
 else
 {
-    <div class="container-lg" style="max-width: 800px;">
+    <div class="container-fluid" style="max-width: 800px;">
         @foreach (var weather_lists in forecastByDays)
         {
             <div class="card m-1 rounded-5 p-1">
-                <Collapsable Title="@weather_lists.Key" Collapsed="GetCollapseOnce()">
+                <Collapsable Title="@weather_lists.Key" SubTitle="@GetShortDate(weather_lists.First().Dt)" Collapsed="GetCollapseOnce()">
                     <div class="scrolling-wrapper-flexbox pb-2">
                         @foreach (var weather in weather_lists)
                         {
@@ -54,7 +54,7 @@ else
         {
             forecastWeather = await weatherService.GetForecast();
             var culture = new System.Globalization.CultureInfo("ru-RU");
-            forecastByDays = forecastWeather?.WeatherList.GroupBy(x => GetDayNameAndDate(x.Dt));
+            forecastByDays = forecastWeather?.WeatherList.GroupBy(x => GetDayName(x.Dt));
         }
         catch (ServiceResponseException e)
         {
@@ -66,10 +66,17 @@ else
 
     }
 
-    private string GetDayNameAndDate(int dt)
+    private string GetShortDate(int dt)
     {
         var culture = new System.Globalization.CultureInfo("ru-RU");
         var date = DateConverter.UnixTimeToLocalDateTime(dt);
-        return $"{date.ToString("dd/MM")}  {culture.DateTimeFormat.GetDayName(date.DayOfWeek)}";
+        return date.ToString("dd/MM");
+    }
+
+    private string GetDayName(int dt)
+    {
+        var culture = new System.Globalization.CultureInfo("ru-RU");
+        var date = DateConverter.UnixTimeToLocalDateTime(dt);
+        return culture.DateTimeFormat.GetDayName(date.DayOfWeek);
     }
 }

@@ -1,5 +1,6 @@
 ﻿<div class="mx-2">
     <div class="row px-1">
+        <span>@SubTitle</span>
         <div class="btn-toolbar btn btn-secondary justify-content-between rounded-5" @onclick="@Toggle">
             <span class="fs-4">@Title</span>
             @if (!Collapsed)
@@ -28,6 +29,8 @@
     public bool Collapsed { get; set; }
     [Parameter]
     public string Title { get; set; }
+    [Parameter]
+    public string SubTitle { get; set; }
 
     void Toggle()
     {
