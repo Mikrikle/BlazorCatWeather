@@ -3,7 +3,12 @@
 
 @if (city != null)
 {
-    <h3>Ваш город: @city.Local_names?["ru"]</h3>
+    <h3>Ваш город:
+        @{
+            var name = (city.Local_names?.ContainsKey("ru")) ?? false ? city?.Local_names["ru"] : city.Name;
+            <text>@name</text>
+        }
+    </h3>
 }
 else
 {

@@ -4,7 +4,10 @@
 @if (city != null)
 {
     <NavLink class="link-light" href="cities">
-        @city.Local_names?["ru"]
+        @{
+            var name = (city.Local_names?.ContainsKey("ru")) ?? false ? city?.Local_names["ru"] : city.Name;
+            <text>@name</text>
+        }
     </NavLink>
 } 
 else if(error != null)
