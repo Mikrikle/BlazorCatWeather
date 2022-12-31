@@ -43,25 +43,33 @@ else
 
 @if (search != null)
 {
-    <div class="card border rounded p-3">
-        <div class="display-6">@search.Name</div>
-        <div class="mb-3">
-            @search.Country
+    <div class="container-sm">
+    @foreach (var city in search)
+    {
+        <div class="card border rounded px-2 m-2">
+            <div class="row">
+                <div class="col">
+                    <div class="display-6">@city.Name</div>
+                    <div class="mb-3">
+                        @city.Country
+                    </div>
+                    <small>
+                        @city.Lat
+                        @city.Lon
+                    </small>
+                </div>
+                <div class="col text-center my-auto">
+                    <button class="btn btn-primary" @onclick="() => HandleSubmit(city)">Выбрать город</button>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            @search.Lat
-            @search.Lon
-        </div>
-        <div class="mb-3">
-            <button class="btn btn-primary" @onclick=HandleSubmit>Выбрать город</button>
-        </div>
-
+    }
     </div>
 }
 
 @code {
     private GeocodingDto? city;
-    private GeocodingDto? search;
+    private GeocodingDto[]? search;
     private ServiceResponseException? error;
 
     private class SeLectCityModel
@@ -77,7 +85,7 @@ else
         error = null;
         try
         {
-            search = await weatherService.SearchCity(seLectCityModel.Name);
+            search = await weatherService.SearchCities(seLectCityModel.Name);
         }
         catch (ServiceResponseException e)
         {
@@ -86,9 +94,9 @@ else
 
     }
 
-    private async Task HandleSubmit()
+    private async Task HandleSubmit(GeocodingDto city)
     {
-        await weatherService.SetUserCity(search);
+        await weatherService.SetUserCity(city);
         navigationManager.NavigateTo("/");
     }
 

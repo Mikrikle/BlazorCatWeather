@@ -47,6 +47,15 @@ namespace BlazorWeather.Web.Services
             return response;
         }
 
+        public async Task<GeocodingDto[]> SearchCities(string city)
+        {
+            var response = await httpDtoService.GetAsync<GeocodingDto[]>(
+                $"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=5&appid={await getAppId()}");
+            if (response == null)
+                throw new ServiceResponseException("Not Found", HttpStatusCode.NotFound);
+            return response;
+        }
+
         public async Task SetUserCity(GeocodingDto city)
         {
             await localStorageService.SetItemAsync(currentCityKey, city);

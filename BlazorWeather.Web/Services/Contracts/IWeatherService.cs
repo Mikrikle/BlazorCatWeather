@@ -16,6 +16,14 @@ namespace BlazorWeather.Web.Services.Contracts
         /// <exception cref="ServiceResponseException"></exception>
         public Task<GeocodingDto> SearchCity(string city);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="city"></param>
+        /// <returns></returns>
+        /// <exception cref="ServiceResponseException"></exception>
+        public Task<GeocodingDto[]> SearchCities(string city);
+
         public Task SetUserCity(GeocodingDto city);
         /// <summary>
         /// 
