@@ -1,6 +1,7 @@
 ﻿body {
     background: rgb(35,0,52);
     background: linear-gradient(45deg, rgba(35,0,52,1) 0%, rgba(97,11,98,1) 25%, rgba(255,206,150,1) 100%);
+    background-attachment: fixed;
     min-height: 100vh;
 }
 
