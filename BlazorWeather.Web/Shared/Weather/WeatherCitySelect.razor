@@ -1,9 +1,11 @@
-﻿@inject IWeatherService weatherService
+﻿@using System.ComponentModel.DataAnnotations;
+@inject IWeatherService weatherService
 @inject NavigationManager navigationManager
 
 @if (city != null)
 {
-    <h3>Ваш город:
+    <h3>
+        Ваш город:
         @{
             var name = (city.Local_names?.ContainsKey("ru")) ?? false ? city?.Local_names["ru"] : city.Name;
             <text>@name</text>
@@ -12,18 +14,26 @@
 }
 else
 {
-     <h3>Ваш город не выбран</h3>
+    <h3>Ваш город не выбран</h3>
 }
 
 <hr />
 <h5>Вы можете сменить город</h5>
 <EditForm Model="@seLectCityModel" OnValidSubmit="@HandleValidSubmit">
+
+    <div class="bg-white rounded-5">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </div>
+
     <div class="mb-3">
         <InputText class="form-control text-dark" id="name" @bind-Value="seLectCityModel.Name" />
     </div>
+
     <div class="mb-3">
         <button class="btn btn-primary" type="submit">Найти</button>
     </div>
+
 </EditForm>
 
 @if (error != null)
@@ -56,7 +66,9 @@ else
 
     private class SeLectCityModel
     {
-        public string Name { get; set; }
+        [Required(ErrorMessage = "Не указано название города")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Недопустимая длина названия города")]
+        public string? Name { get; set; }
     };
     private SeLectCityModel seLectCityModel = new();
 
