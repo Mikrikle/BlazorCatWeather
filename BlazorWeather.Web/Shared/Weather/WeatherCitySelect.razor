@@ -44,26 +44,34 @@ else
 @if (search != null)
 {
     <div class="container-sm">
-    @foreach (var city in search)
-    {
-        <div class="card border rounded px-2 m-2">
-            <div class="row">
-                <div class="col">
-                    <div class="display-6">@city.Name</div>
-                    <div class="mb-3">
-                        @city.Country
+
+        @if (search.Length == 0)
+        {
+            <div class="card border rounded px-2 m-2">
+                Города не найдены
+            </div>
+        }
+
+        @foreach (var city in search)
+        {
+            <div class="card border rounded px-2 m-2">
+                <div class="row">
+                    <div class="col">
+                        <div class="display-6">@city.Name</div>
+                        <div class="mb-3">
+                            @city.Country
+                        </div>
+                        <small>
+                            @city.Lat
+                            @city.Lon
+                        </small>
                     </div>
-                    <small>
-                        @city.Lat
-                        @city.Lon
-                    </small>
-                </div>
-                <div class="col text-center my-auto">
-                    <button class="btn btn-primary" @onclick="() => HandleSubmit(city)">Выбрать город</button>
+                    <div class="col text-center my-auto">
+                        <button class="btn btn-primary" @onclick="() => HandleSubmit(city)">Выбрать город</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
+        }
     </div>
 }
 
