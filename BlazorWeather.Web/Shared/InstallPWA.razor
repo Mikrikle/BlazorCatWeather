@@ -1,0 +1,25 @@
+﻿@inject IJSRuntime JS
+
+@if (installed != true)
+{
+    <button class="w-100 btn btn-primary px-3" @onclick="Install">
+        <span class="oi oi-data-transfer-download" aria-hidden="true"></span> Установить
+    </button>
+
+}
+
+
+@code {
+    private bool installed = false;
+
+    private async Task Install()
+    {
+        await JS.InvokeVoidAsync("installPWA");
+        installed = true;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        installed = await JS.InvokeAsync<bool>("isInstalled");
+    }
+}
