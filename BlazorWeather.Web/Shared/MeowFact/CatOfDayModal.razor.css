@@ -1,5 +1,5 @@
 ﻿.img-fit {
-    object-fit: cover;
+    object-fit: fill;
     max-width: 100%;
     max-height: 500px;
     border-radius: 50% 20% / 10% 40%;

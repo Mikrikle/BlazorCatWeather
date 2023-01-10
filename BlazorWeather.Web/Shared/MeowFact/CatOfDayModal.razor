@@ -3,16 +3,15 @@
 @if (image != null)
 {
     <div class="row text-center">
-        <MeowFact CssClass="h5"/>
+        <MeowFact CssClass="fs-5"/>
         <hr />
-        <img src="@image.Url" alt="Cat" class="img-fit">
+        <img src="@image.Url" alt="Cat" class="img-fit" style="overflow-y: scroll; max-height:35vh;">
     </div>
 }
 
 
 @code {
     private CatApiImageDto? image;
-    private string? Show { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {

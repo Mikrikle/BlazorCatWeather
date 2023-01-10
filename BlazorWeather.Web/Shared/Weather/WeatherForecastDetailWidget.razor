@@ -17,7 +17,7 @@ else
         @foreach (var weather_lists in forecastByDays)
         {
             <div class="card m-1 rounded-5 p-1">
-                <Collapsable Title="@weather_lists.Key" SubTitle="@GetShortDate(weather_lists.First().Dt)" Collapsed="GetCollapseOnce()">
+                <Collapsable Title="@weather_lists.Key" SubTitle="@GetShortDate(weather_lists.First().Dt)" Collapsed="true">
                     <div class="scrolling-wrapper-flexbox pb-2">
                         @foreach (var weather in weather_lists)
                         {
@@ -36,20 +36,8 @@ else
     private ServiceResponseException? error;
     private IEnumerable<IGrouping<string, WeatherList>>? forecastByDays;
 
-    private int _collapsedCount = 0;
-    private bool GetCollapseOnce()
-    {
-        if (_collapsedCount < 2)
-        {
-            _collapsedCount++;
-            return true;
-        }
-        return false;
-    }
-
     protected override async Task OnInitializedAsync()
     {
-        _collapsedCount = 0;
         try
         {
             forecastWeather = await weatherService.GetForecast();
