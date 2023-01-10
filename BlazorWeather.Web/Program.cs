@@ -1,3 +1,4 @@
+using System.Globalization;
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using BlazorWeather.Web;
@@ -11,6 +12,8 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+builder.Services.AddLocalization();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredModal();

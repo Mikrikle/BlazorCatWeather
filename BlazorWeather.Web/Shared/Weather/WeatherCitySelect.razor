@@ -1,24 +1,25 @@
 ﻿@using System.ComponentModel.DataAnnotations;
+@inject IStringLocalizer<CultureResource> Loc
 @inject IWeatherService weatherService
 @inject NavigationManager navigationManager
 
 @if (city != null)
 {
     <h3>
-        Ваш город:
+        @Loc["Your city"]:
         @{
-            var name = (city.Local_names?.ContainsKey("ru")) ?? false ? city?.Local_names["ru"] : city.Name;
+            string key = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            var name = (city.Local_names?.ContainsKey(key)) ?? false ? city?.Local_names[key] : city.Name;
             <text>@name</text>
         }
     </h3>
 }
 else
 {
-    <h3>Ваш город не выбран</h3>
+    <h3>@Loc["City not selected"]</h3>
 }
 
 <hr />
-<h5>Вы можете сменить город</h5>
 <EditForm Model="@seLectCityModel" OnValidSubmit="@HandleValidSubmit">
 
     <div class="bg-white rounded-5">
@@ -31,7 +32,7 @@ else
     </div>
 
     <div class="mb-3">
-        <button class="btn btn-primary" type="submit">Найти</button>
+        <button class="btn btn-primary" type="submit">@Loc["Find"]</button>
     </div>
 
 </EditForm>
@@ -48,7 +49,7 @@ else
         @if (search.Length == 0)
         {
             <div class="card border rounded px-2 m-2">
-                Города не найдены
+                @Loc["No cities found"]
             </div>
         }
 
@@ -67,7 +68,7 @@ else
                         </small>
                     </div>
                     <div class="col text-center my-auto">
-                        <button class="btn btn-primary" @onclick="() => HandleSubmit(city)">Выбрать город</button>
+                        <button class="btn btn-primary" @onclick="() => HandleSubmit(city)">@Loc["Select"]</button>
                     </div>
                 </div>
             </div>
@@ -82,8 +83,8 @@ else
 
     private class SeLectCityModel
     {
-        [Required(ErrorMessage = "Не указано название города")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Недопустимая длина названия города")]
+        [Required(ErrorMessageResourceName = "SeLectCityRequired", ErrorMessageResourceType = typeof(CultureResource))]
+        [StringLength(50, MinimumLength = 3, ErrorMessageResourceName = "SeLectCityLength", ErrorMessageResourceType = typeof(CultureResource))]
         public string? Name { get; set; }
     };
     private SeLectCityModel seLectCityModel = new();

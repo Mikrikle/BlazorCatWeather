@@ -1,8 +1,10 @@
-﻿<div class="m-1 text-center">
+﻿@inject IStringLocalizer<CultureResource> Loc
+
+<div class="m-1 text-center">
     <span class="rounded-pill p-1">@DateConverter.UnixTimeToLocalDateTime(WeatherItem.Dt).ToString("H:mm")</span>
     <div class="card rounded-5 p-1" style="width:150px;">
 
-        <div сlass="text-center">
+        <div class="text-center">
             <img src="@($"https://openweathermap.org/img/wn/{WeatherItem.Weather.First().Icon}@2x.png")"
                  alt="currentWeather.Weather.First().Icon">
         </div>
@@ -24,7 +26,7 @@
             </div>
             <div>
                 <i class="fas fa-wind fa-fw"></i>
-                <span>@WeatherItem.Wind.Speed м/с</span>
+                <span>@WeatherItem.Wind.Speed @Loc["m/s"]</span>
             </div>
             <div>
                 <i class="fas fa-tint fa-fw"></i>

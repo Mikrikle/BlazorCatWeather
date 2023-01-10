@@ -53,7 +53,6 @@ else
         try
         {
             forecastWeather = await weatherService.GetForecast();
-            var culture = new System.Globalization.CultureInfo("ru-RU");
             forecastByDays = forecastWeather?.WeatherList.GroupBy(x => GetDayName(x.Dt));
         }
         catch (ServiceResponseException e)
@@ -68,15 +67,13 @@ else
 
     private string GetShortDate(int dt)
     {
-        var culture = new System.Globalization.CultureInfo("ru-RU");
         var date = DateConverter.UnixTimeToLocalDateTime(dt);
         return date.ToString("dd/MM");
     }
 
     private string GetDayName(int dt)
     {
-        var culture = new System.Globalization.CultureInfo("ru-RU");
         var date = DateConverter.UnixTimeToLocalDateTime(dt);
-        return culture.DateTimeFormat.GetDayName(date.DayOfWeek);
+        return CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(date.DayOfWeek);
     }
 }

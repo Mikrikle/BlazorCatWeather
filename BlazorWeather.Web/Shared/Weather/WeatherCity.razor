@@ -1,11 +1,13 @@
-﻿@inject IWeatherService weatherService
+﻿@inject IStringLocalizer<CultureResource> Loc
+@inject IWeatherService weatherService
 
 
 @if (city != null)
 {
     <NavLink class="link-light" href="cities">
         @{
-            var name = (city.Local_names?.ContainsKey("ru")) ?? false ? city?.Local_names["ru"] : city.Name;
+            string key = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+            var name = (city.Local_names?.ContainsKey(key)) ?? false ? city?.Local_names[key] : city.Name;
             <text>@name</text>
         }
     </NavLink>
@@ -13,7 +15,7 @@
 else if(error != null)
 {
     <NavLink class="btn btn-outline-light" href="cities">
-        <span class="oi oi-home" aria-hidden="true"></span> Выбрать город
+        <span class="oi oi-home" aria-hidden="true"></span> @Loc["Select City"]
     </NavLink>
 }
 

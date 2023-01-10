@@ -1,6 +1,7 @@
 ﻿@page "/"
-<PageTitle>Погода</PageTitle>
+@inject IStringLocalizer<CultureResource> Loc
 
+<PageTitle>@Loc["Weather"]</PageTitle>
 
 <div class="container p-3">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -9,7 +10,7 @@
             <WeatherWidget />
             <WeatherForecastSmallWidget />
             <NavLink class="btn btn-primary rounded-5 mt-3 w-100" href="forecast" Match="NavLinkMatch.All">
-                Детальный прогноз
+                @Loc["Detailed forecast"]
             </NavLink>
         </div>
     </div>

@@ -1,12 +1,14 @@
-﻿@if(ex != null)
+﻿@inject IStringLocalizer<CultureResource> Loc
+
+@if(ex != null)
 {
 <div class="alert alert-danger" role="alert">
         @if(ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
-            <h4 class="alert-heading">Вы не авторизированы</h4>
-            <p>Укажите "Open weahter ID" в настройках</p>
+            <h4 class="alert-heading">@Loc["Unauthorized"]</h4>
+            <p>@Loc["Exc-auth-msg"]</p>
              <NavLink class="btn btn-outline-danger" href="settings">
-                <span class="oi oi-cog" aria-hidden="true"></span> Перейти
+                <span class="oi oi-cog" aria-hidden="true"></span> @Loc["Settings"]
             </NavLink>
         }
         else

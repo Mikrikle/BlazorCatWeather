@@ -1,6 +1,7 @@
 ﻿@page "/forecast"
+@inject IStringLocalizer<CultureResource> Loc
 
-<PageTitle>Прогноз погоды</PageTitle>
+<PageTitle>@Loc["Weather forecast"]</PageTitle>
 
-<h3>Ваш город: <WeatherCity /></h3>
+<h3>@Loc["Your city"]: <WeatherCity /></h3>
 <WeatherForecastDetailWidget />

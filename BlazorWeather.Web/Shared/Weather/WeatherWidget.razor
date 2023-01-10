@@ -1,4 +1,5 @@
-﻿@inject IWeatherService weatherService
+﻿@inject IStringLocalizer<CultureResource> Loc
+@inject IWeatherService weatherService
 
 @if (currentWeather == null)
 {
@@ -38,7 +39,7 @@ else
                     <div class="flex-grow-1">
                         <div>
                             <i class="fas fa-wind fa-fw"></i>
-                            <span class="ms-1">@currentWeather.Wind.Speed м/с</span>
+                            <span class="ms-1">@currentWeather.Wind.Speed @Loc["m/s"]</span>
                         </div>
                         <div>
                             <i class="fas fa-tint fa-fw"></i>
@@ -50,7 +51,7 @@ else
                         </div>
                         <div>
                             <i class="fas fa-gauge fa-fw"></i>
-                            <span class="ms-1"> @(Math.Round(currentWeather.Main.Pressure * 0.750064)) мм рт.ст.</span>
+                            <span class="ms-1"> @(Math.Round(currentWeather.Main.Pressure * 0.750064)) @Loc["mm Hg"]</span>
                         </div>
                     </div>
                     <div>
@@ -67,7 +68,7 @@ else
                 <div class="d-flex flex-column text-center">
                     <div>
                         <i class="small fas fa-users fa-fw"></i>
-                        <span class="small">Ощущается как @currentWeather.Main.FeelsLike°C</span>
+                        <span class="small">@Loc["Feels like"] @currentWeather.Main.FeelsLike°C</span>
                     </div>
                 </div>
             </div>

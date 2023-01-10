@@ -1,4 +1,5 @@
-﻿@inject IWeatherService weatherService
+﻿@inject IStringLocalizer<CultureResource> Loc
+@inject IWeatherService weatherService
 @inject NavigationManager navigationManager
 
 <EditForm Model="@appIdModel" OnValidSubmit="@HandleAppIdForm" class="border rounded p-2">
@@ -10,7 +11,7 @@
         <InputText id="name" class="form-control form-control-lg text-dark" @bind-Value="appIdModel.AppId" />
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Подтвердить</button>
+        <button type="submit" class="btn btn-primary">@Loc["Submit"]</button>
     </div>
 
 </EditForm>

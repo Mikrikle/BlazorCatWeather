@@ -1,8 +1,9 @@
 ﻿@page "/settings"
+@inject IStringLocalizer<CultureResource> Loc
 
-<PageTitle>Настройки</PageTitle>
+<PageTitle>@Loc["Settings"]</PageTitle>
 
-<h3>Настройки</h3>
+<h3>@Loc["Settings"]</h3>
 <hr />
 
 <WeatherSettings />

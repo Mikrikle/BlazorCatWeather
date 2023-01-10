@@ -1,5 +1,6 @@
 ﻿@page "/cities"
+@inject IStringLocalizer<CultureResource> Loc
 
-<PageTitle>Город</PageTitle>
+<PageTitle>@Loc["City"]</PageTitle>
 
 <WeatherCitySelect />

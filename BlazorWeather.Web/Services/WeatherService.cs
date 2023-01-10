@@ -5,6 +5,7 @@ using BlazorWeather.Web.Utilites;
 using System.Net.Http.Json;
 using System.Net;
 using BlazorWeather.Web.Exceptions;
+using System.Globalization;
 
 namespace BlazorWeather.Web.Services
 {
@@ -18,7 +19,7 @@ namespace BlazorWeather.Web.Services
         private const string currentCityKey = "Key_Weather_CurrentCity";
         private const string appIdKey = "Key_Weather_AppId";
 
-        private string Lang = "ru";
+        private string Lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
         private async Task<string> getAppId() => await localStorageService.GetItemAsync<string>(appIdKey);
 
         public WeatherService(ILocalStorageService localStorageService, IHttpDtoService httpDtoService)

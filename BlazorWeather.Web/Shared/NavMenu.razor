@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject IStringLocalizer<CultureResource> Loc
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href=""><i class="fa-solid fa-cat mx-2"></i>Cat Weather</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -11,22 +13,22 @@
     <nav class="flex-column">
         <div class="nav-item">
             <NavLink class="nav-link px-3" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Главная
+                <span class="oi oi-home" aria-hidden="true"></span> @Loc["Home"]
             </NavLink>
         </div>
         <div class="nav-item">
             <NavLink class="nav-link px-3" href="forecast" Match="NavLinkMatch.All">
-                <span class="oi oi-cloud" aria-hidden="true"></span> Прогноз
+                <span class="oi oi-cloud" aria-hidden="true"></span> @Loc["Forecast"]
             </NavLink>
         </div>
         <div class="nav-item">
             <NavLink class="nav-link px-3" href="settings">
-                <span class="oi oi-cog" aria-hidden="true"></span> Настройки
+                <span class="oi oi-cog" aria-hidden="true"></span> @Loc["Settings"]
             </NavLink>
         </div>
         <div class="nav-item">
             <NavLink class="nav-link px-3" href="cities">
-                <span class="oi oi-globe" aria-hidden="true"></span> Город
+                <span class="oi oi-globe" aria-hidden="true"></span> @Loc["City"]
             </NavLink>
         </div>
         <div class="nav-item">

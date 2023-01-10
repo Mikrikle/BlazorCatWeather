@@ -1,9 +1,10 @@
-﻿@inject IJSRuntime JS
+﻿@inject IStringLocalizer<CultureResource> Loc
+@inject IJSRuntime JS
 
 @if (installed != true)
 {
     <button class="w-100 btn btn-primary px-3" @onclick="Install">
-        <span class="oi oi-data-transfer-download" aria-hidden="true"></span> Установить
+        <span class="oi oi-data-transfer-download" aria-hidden="true"></span> @Loc["Install"]
     </button>
 
 }
