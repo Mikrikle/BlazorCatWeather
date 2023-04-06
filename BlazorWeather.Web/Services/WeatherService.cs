@@ -13,19 +13,29 @@ namespace BlazorWeather.Web.Services
     {
         private readonly ILocalStorageService localStorageService;
         private readonly IHttpDtoService httpDtoService;
+        private readonly IConfiguration configuration;
 
         private const string currentWeatherKey = "Key_Weather_CurrentWeather";
         private const string forecastWeatherKey = "Key_Weather_ForecastWeather";
         private const string currentCityKey = "Key_Weather_CurrentCity";
         private const string appIdKey = "Key_Weather_AppId";
 
-        private string Lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-        private async Task<string> getAppId() => await localStorageService.GetItemAsync<string>(appIdKey);
+        private readonly (double lat, double lon) defaultCoords = new(55.7522, 37.61556);
+        private string defaultApiKey => configuration["defaultApiKey"] ?? "";
 
-        public WeatherService(ILocalStorageService localStorageService, IHttpDtoService httpDtoService)
+        private string Lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+
+        public async Task<string> GetAppId()
+        {
+            string appid = await localStorageService.GetItemAsync<string>(appIdKey);
+            return string.IsNullOrEmpty(appid) ? defaultApiKey : appid;
+        }
+
+        public WeatherService(ILocalStorageService localStorageService, IHttpDtoService httpDtoService, IConfiguration configuration)
         {
             this.localStorageService = localStorageService;
             this.httpDtoService = httpDtoService;
+            this.configuration = configuration;
         }
 
         public async Task SetAppId(string appId)
@@ -33,15 +43,10 @@ namespace BlazorWeather.Web.Services
             await localStorageService.SetItemAsync(appIdKey, appId);
         }
 
-        public async Task<string> GetAppId()
-        {
-            return await localStorageService.GetItemAsync<string>(appIdKey);
-        }
-
         public async Task<GeocodingDto> SearchCity(string city)
         {
             var response = (await httpDtoService.GetAsync<GeocodingDto[]>(
-                $"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={await getAppId()}"))
+                $"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={await GetAppId()}"))
                 .FirstOrDefault();
             if (response == null)
                 throw new ServiceResponseException("Not Found", HttpStatusCode.NotFound);
@@ -51,7 +56,7 @@ namespace BlazorWeather.Web.Services
         public async Task<GeocodingDto[]> SearchCities(string city)
         {
             var response = await httpDtoService.GetAsync<GeocodingDto[]>(
-                $"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=5&appid={await getAppId()}");
+                $"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=5&appid={await GetAppId()}");
             if (response == null)
                 throw new ServiceResponseException("Not Found", HttpStatusCode.NotFound);
             return response;
@@ -81,7 +86,7 @@ namespace BlazorWeather.Web.Services
                 || DtNow - (response.Dt) > (15 * 60))
             {
                 response = await httpDtoService.GetAsync<WeatherCurrentDto>(
-                $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}");
+                $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await GetAppId()}");
                 await localStorageService.SetItemAsync(currentWeatherKey, response);
             }
             return response;
@@ -95,7 +100,7 @@ namespace BlazorWeather.Web.Services
             }
             catch
             {
-                return await GetWeather(0, 0);
+                return await GetWeather(defaultCoords.lat, defaultCoords.lon);
             }
         }
 
@@ -110,7 +115,7 @@ namespace BlazorWeather.Web.Services
                 || DtNow - (response.WeatherList.FirstOrDefault()?.Dt ?? 0) > (60 * 60))
             {
                 response = await httpDtoService.GetAsync<WeatherForecastDto>(
-                $"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await getAppId()}");
+                $"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&lang={Lang}&appid={await GetAppId()}");
                 await localStorageService.SetItemAsync(forecastWeatherKey, response);
 
             }
@@ -125,7 +130,7 @@ namespace BlazorWeather.Web.Services
             }
             catch
             {
-                return await GetForecast(0, 0);
+                return await GetForecast(defaultCoords.lat, defaultCoords.lon);
             }
         }
 
